@@ -4,13 +4,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { ConversionGroup } from '@/types';
+} from '@/components/ui/select'
+import type { ConversionGroup } from '@/lib/types'
 
 interface ConversionSelectorProps {
-  conversionGroups: ConversionGroup[];
-  selectedConversionId?: string;
-  onConversionChange: (conversionId: string) => void;
+  conversionGroups: ConversionGroup[]
+  selectedConversionId?: string
+  onConversionChange: (conversionId: string) => void
 }
 
 export function ConversionSelector({
@@ -20,12 +20,14 @@ export function ConversionSelector({
 }: ConversionSelectorProps) {
   const selectedConversion = conversionGroups
     .flatMap((g) => g.conversions)
-    .find((c) => c.id === selectedConversionId);
+    .find((c) => c.id === selectedConversionId)
 
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-sm font-medium mb-2 block">Conversion Type</label>
+        <label className="text-sm font-medium mb-2 block">
+          Conversion Type
+        </label>
         <Select value={selectedConversionId} onValueChange={onConversionChange}>
           <SelectTrigger>
             <SelectValue placeholder="Choose a conversion..." />
@@ -49,14 +51,18 @@ export function ConversionSelector({
 
       {selectedConversion && (
         <div className="text-sm text-muted-foreground">
-          <p className="font-medium text-foreground mb-1">{selectedConversion.name}</p>
+          <p className="font-medium text-foreground mb-1">
+            {selectedConversion.name}
+          </p>
           <p>{selectedConversion.description}</p>
           <div className="mt-2 text-xs">
-            <span className="font-medium">Input:</span> {selectedConversion.inputFormat} →{' '}
-            <span className="font-medium">Output:</span> {selectedConversion.outputFormat}
+            <span className="font-medium">Input:</span>{' '}
+            {selectedConversion.inputFormat} →{' '}
+            <span className="font-medium">Output:</span>{' '}
+            {selectedConversion.outputFormat}
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { createSuccess, createError } from '../conversion-utils';
-import { ConversionCategory } from '@/types';
+import { createSuccess, createError } from '../conversion-utils'
+import { ConversionCategory } from '../types'
 
 export const base64EncodeConversion = {
   id: 'base64-encode',
@@ -13,15 +13,15 @@ export const base64EncodeConversion = {
   convert: (input: string) => {
     try {
       if (!input) {
-        return createSuccess('');
+        return createSuccess('')
       }
-      const encoded = btoa(unescape(encodeURIComponent(input)));
-      return createSuccess(encoded);
+      const encoded = btoa(unescape(encodeURIComponent(input)))
+      return createSuccess(encoded)
     } catch {
-      return createError('Failed to encode to Base64');
+      return createError('Failed to encode to Base64')
     }
   },
-};
+}
 
 export const base64DecodeConversion = {
   id: 'base64-decode',
@@ -35,12 +35,12 @@ export const base64DecodeConversion = {
   convert: (input: string) => {
     try {
       if (!input) {
-        return createSuccess('');
+        return createSuccess('')
       }
-      const decoded = decodeURIComponent(escape(atob(input)));
-      return createSuccess(decoded);
+      const decoded = decodeURIComponent(escape(atob(input)))
+      return createSuccess(decoded)
     } catch {
-      return createError('Invalid Base64 input');
+      return createError('Invalid Base64 input')
     }
   },
-};
+}

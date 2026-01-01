@@ -1,90 +1,95 @@
-'use client';
+import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { InputPanel } from '@/components/InputPanel'
+import { OutputPanel } from '@/components/OutputPanel'
+import { ConversionSidebar } from '@/components/ConversionSidebar'
+import { ArrowRight, RefreshCw, Trash2, Menu, X } from 'lucide-react'
+import { registry } from '@/lib'
+import { toast } from 'sonner'
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { InputPanel } from '@/components/InputPanel';
-import { OutputPanel } from '@/components/OutputPanel';
-import { ConversionSidebar } from '@/components/ConversionSidebar';
-import { ArrowRight, RefreshCw, Trash2, Menu, X } from 'lucide-react';
-import { registry } from '@/lib';
-import { toast } from 'sonner';
+export const Route = createFileRoute('/')({
+  component: HomePage,
+})
 
-export default function Home() {
-  const [selectedConversionId, setSelectedConversionId] = useState<string>();
-  const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+function HomePage() {
+  const [selectedConversionId, setSelectedConversionId] = useState<string>()
+  const [input, setInput] = useState('')
+  const [output, setOutput] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const conversionGroups = registry.getGroups();
+  const conversionGroups = registry.getGroups()
 
   const handleConvert = async () => {
     if (!selectedConversionId || !input) {
-      return;
+      return
     }
 
-    setIsLoading(true);
-    setError('');
+    setIsLoading(true)
+    setError('')
 
     try {
-      const conversion = registry.get(selectedConversionId);
+      const conversion = registry.get(selectedConversionId)
       if (!conversion) {
-        setError('Conversion not found');
-        return;
+        setError('Conversion not found')
+        return
       }
 
-      const result = await conversion.convert(input);
+      const result = await conversion.convert(input)
 
       if (result.success) {
-        setOutput(String(result.data));
+        setOutput(String(result.data))
       } else {
-        setError(result.error);
-        setOutput('');
+        setError(result.error)
+        setOutput('')
       }
     } catch {
-      setError('An unexpected error occurred');
-      setOutput('');
+      setError('An unexpected error occurred')
+      setOutput('')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleSwap = () => {
-    const conversion = registry.get(selectedConversionId || '');
+    const conversion = registry.get(selectedConversionId || '')
     if (conversion?.bidirectional && conversion.reverseConversionId) {
-      setInput(output);
-      setSelectedConversionId(conversion.reverseConversionId);
-      setOutput('');
-      setError('');
+      setInput(output)
+      setSelectedConversionId(conversion.reverseConversionId)
+      setOutput('')
+      setError('')
     }
-  };
+  }
 
   const handleClear = () => {
-    setInput('');
-    setOutput('');
-    setError('');
-  };
+    setInput('')
+    setOutput('')
+    setError('')
+  }
 
   const handleCopy = async () => {
-    const textToCopy = error || output;
+    const textToCopy = error || output
     if (!textToCopy) {
-      return;
+      return
     }
 
     try {
-      await navigator.clipboard.writeText(textToCopy);
-      toast.success('Copied to clipboard!');
+      await navigator.clipboard.writeText(textToCopy)
+      toast.success('Copied to clipboard!')
     } catch {
-      toast.error('Failed to copy');
+      toast.error('Failed to copy')
     }
-  };
+  }
 
-  const selectedConversion = selectedConversionId ? registry.get(selectedConversionId) : undefined;
+  const selectedConversion = selectedConversionId
+    ? registry.get(selectedConversionId)
+    : undefined
 
   const placeholder = selectedConversion
     ? `Enter ${selectedConversion.inputFormat}...`
-    : 'Select a conversion type and enter your input...';
+    : 'Select a conversion type and enter your input...'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
@@ -98,10 +103,16 @@ export default function Home() {
                 className="md:hidden"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isMobileMenuOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Menu className="h-5 w-5" />
+                )}
               </Button>
               <div>
-                <h1 className="text-xl md:text-2xl font-bold tracking-tight">Dev Convert Tool</h1>
+                <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+                  Dev Convert Tool
+                </h1>
                 <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">
                   Fast, client-side conversion tools for developers
                 </p>
@@ -121,8 +132,8 @@ export default function Home() {
                 conversionGroups={conversionGroups}
                 selectedConversionId={selectedConversionId}
                 onConversionChange={(id) => {
-                  setSelectedConversionId(id);
-                  setIsMobileMenuOpen(false);
+                  setSelectedConversionId(id)
+                  setIsMobileMenuOpen(false)
                 }}
               />
             </div>
@@ -178,19 +189,24 @@ export default function Home() {
                   </Button>
                 )}
 
-                <Button onClick={handleClear} variant="outline" disabled={!input && !output}>
+                <Button
+                  onClick={handleClear}
+                  variant="outline"
+                  disabled={!input && !output}
+                >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Clear
                 </Button>
               </div>
 
               <div className="text-center text-xs text-muted-foreground">
-                All conversions are performed client-side. Your data never leaves your browser.
+                All conversions are performed client-side. Your data never
+                leaves your browser.
               </div>
             </div>
           </main>
         </div>
       </div>
     </div>
-  );
+  )
 }

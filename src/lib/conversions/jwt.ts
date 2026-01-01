@@ -1,6 +1,6 @@
-import { createSuccess, createError } from '../conversion-utils';
-import { ConversionCategory } from '@/types';
-import { jwtDecode } from 'jwt-decode';
+import { createSuccess, createError } from '../conversion-utils'
+import { jwtDecode } from 'jwt-decode'
+import { ConversionCategory } from '../types'
 
 export const jwtDecodeConversion = {
   id: 'jwt-decode',
@@ -14,21 +14,22 @@ export const jwtDecodeConversion = {
   convert: (input: string) => {
     try {
       if (!input) {
-        return createSuccess('');
+        return createSuccess('')
       }
-      const decoded = jwtDecode(input);
-      const result = JSON.stringify(decoded, null, 2);
-      return createSuccess(result);
+      const decoded = jwtDecode(input)
+      const result = JSON.stringify(decoded, null, 2)
+      return createSuccess(result)
     } catch {
-      return createError('Invalid JWT token');
+      return createError('Invalid JWT token')
     }
   },
-};
+}
 
 export const jwtEncodeConversion = {
   id: 'jwt-encode',
   name: 'JWT Encode',
-  description: 'Encode JSON payload to JWT (header: {"alg":"HS256","typ":"JWT"})',
+  description:
+    'Encode JSON payload to JWT (header: {"alg":"HS256","typ":"JWT"})',
   category: ConversionCategory.TEXT_ENCODING,
   inputFormat: 'JSON',
   outputFormat: 'JWT Token',
@@ -37,22 +38,25 @@ export const jwtEncodeConversion = {
   convert: (input: string) => {
     try {
       if (!input) {
-        return createSuccess('');
+        return createSuccess('')
       }
-      const payload = JSON.parse(input);
-      const header = { alg: 'HS256', typ: 'JWT' };
+      const payload = JSON.parse(input)
+      const header = { alg: 'HS256', typ: 'JWT' }
 
       const encode = (obj: Record<string, unknown>) => {
-        return btoa(JSON.stringify(obj)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-      };
+        return btoa(JSON.stringify(obj))
+          .replace(/=/g, '')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+      }
 
-      const headerEncoded = encode(header);
-      const payloadEncoded = encode(payload);
-      const signature = `${headerEncoded}.${payloadEncoded}`;
+      const headerEncoded = encode(header)
+      const payloadEncoded = encode(payload)
+      const signature = `${headerEncoded}.${payloadEncoded}`
 
-      return createSuccess(signature);
+      return createSuccess(signature)
     } catch {
-      return createError('Invalid JSON input');
+      return createError('Invalid JSON input')
     }
   },
-};
+}

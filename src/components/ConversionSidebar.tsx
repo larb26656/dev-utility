@@ -1,12 +1,12 @@
-import { ConversionGroup } from '@/types';
-import { ChevronDown, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import type { ConversionGroup } from '@/lib/types'
+import { ChevronDown, ChevronRight } from 'lucide-react'
+import { useState } from 'react'
 
 interface ConversionSidebarProps {
-  conversionGroups: ConversionGroup[];
-  selectedConversionId?: string;
-  onConversionChange: (conversionId: string) => void;
-  isCollapsed?: boolean;
+  conversionGroups: ConversionGroup[]
+  selectedConversionId?: string
+  onConversionChange: (conversionId: string) => void
+  isCollapsed?: boolean
 }
 
 export function ConversionSidebar({
@@ -16,25 +16,25 @@ export function ConversionSidebar({
   isCollapsed = false,
 }: ConversionSidebarProps) {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(conversionGroups.map((g) => g.category))
-  );
+    new Set(conversionGroups.map((g) => g.category)),
+  )
 
   const toggleCategory = (category: string) => {
     setExpandedCategories((prev) => {
-      const newSet = new Set(prev);
+      const newSet = new Set(prev)
       if (newSet.has(category)) {
-        newSet.delete(category);
+        newSet.delete(category)
       } else {
-        newSet.add(category);
+        newSet.add(category)
       }
-      return newSet;
-    });
-  };
+      return newSet
+    })
+  }
 
   return (
     <div className="h-full">
       {conversionGroups.map((group) => {
-        const isExpanded = expandedCategories.has(group.category);
+        const isExpanded = expandedCategories.has(group.category)
         return (
           <div key={group.category} className="mb-4">
             <button
@@ -53,7 +53,7 @@ export function ConversionSidebar({
             {isExpanded && !isCollapsed && (
               <div className="space-y-1 mt-1">
                 {group.conversions.map((conversion) => {
-                  const isSelected = conversion.id === selectedConversionId;
+                  const isSelected = conversion.id === selectedConversionId
                   return (
                     <button
                       key={conversion.id}
@@ -66,7 +66,7 @@ export function ConversionSidebar({
                     >
                       {conversion.name}
                     </button>
-                  );
+                  )
                 })}
               </div>
             )}
@@ -74,7 +74,7 @@ export function ConversionSidebar({
             {isCollapsed && (
               <div className="space-y-1 mt-1">
                 {group.conversions.map((conversion) => {
-                  const isSelected = conversion.id === selectedConversionId;
+                  const isSelected = conversion.id === selectedConversionId
                   return (
                     <button
                       key={conversion.id}
@@ -88,13 +88,13 @@ export function ConversionSidebar({
                     >
                       {conversion.name.charAt(0).toUpperCase()}
                     </button>
-                  );
+                  )
                 })}
               </div>
             )}
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

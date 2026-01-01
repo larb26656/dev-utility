@@ -1,5 +1,5 @@
-import { createSuccess, createError } from '../conversion-utils';
-import { ConversionCategory } from '@/types';
+import { createSuccess, createError } from '../conversion-utils'
+import { ConversionCategory } from '../types'
 
 const THAI_TO_ENGLISH: Record<string, string> = {
   '\u0E51': '1',
@@ -47,7 +47,7 @@ const THAI_TO_ENGLISH: Record<string, string> = {
   '\u0E2A': ',',
   '\u0E27': '.',
   '\u0E07': '/',
-};
+}
 
 const ENGLISH_TO_THAI: Record<string, string> = {
   '1': '\u0E51',
@@ -93,7 +93,7 @@ const ENGLISH_TO_THAI: Record<string, string> = {
   ',': '\u0E2A',
   '.': '\u0E27',
   '/': '\u0E07',
-};
+}
 
 export const thaiToEnglishConversion = {
   id: 'thai-to-english',
@@ -106,16 +106,16 @@ export const thaiToEnglishConversion = {
   reverseConversionId: 'english-to-thai',
   convert: (input: string) => {
     try {
-      let result = '';
+      let result = ''
       for (let i = 0; i < input.length; i++) {
-        result += THAI_TO_ENGLISH[input[i]] || input[i];
+        result += THAI_TO_ENGLISH[input[i]] || input[i]
       }
-      return createSuccess(result);
+      return createSuccess(result)
     } catch {
-      return createError('Failed to convert Thai to English');
+      return createError('Failed to convert Thai to English')
     }
   },
-};
+}
 
 export const englishToThaiConversion = {
   id: 'english-to-thai',
@@ -128,13 +128,13 @@ export const englishToThaiConversion = {
   reverseConversionId: 'thai-to-english',
   convert: (input: string) => {
     try {
-      let result = '';
+      let result = ''
       for (let i = 0; i < input.length; i++) {
-        result += ENGLISH_TO_THAI[input[i]] || input[i];
+        result += ENGLISH_TO_THAI[input[i]] || input[i]
       }
-      return createSuccess(result);
+      return createSuccess(result)
     } catch {
-      return createError('Failed to convert English to Thai');
+      return createError('Failed to convert English to Thai')
     }
   },
-};
+}
