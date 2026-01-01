@@ -1,0 +1,83 @@
+import type { GeneratorConversion } from '@/lib/types/generator'
+
+const loremWords = [
+  'lorem',
+  'ipsum',
+  'dolor',
+  'sit',
+  'amet',
+  'consectetur',
+  'adipiscing',
+  'elit',
+  'sed',
+  'do',
+  'eiusmod',
+  'tempor',
+  'incididunt',
+  'ut',
+  'labore',
+  'et',
+  'dolore',
+  'magna',
+  'aliqua',
+  'enim',
+  'ad',
+  'minim',
+  'veniam',
+  'quis',
+  'nostrud',
+  'exercitation',
+  'ullamco',
+  'laboris',
+  'nisi',
+  'aliquip',
+  'ex',
+  'ea',
+  'commodo',
+  'consequat',
+  'duis',
+  'aute',
+  'irure',
+  'in',
+  'reprehenderit',
+  'voluptate',
+  'velit',
+  'esse',
+  'cillum',
+  'fugiat',
+  'nulla',
+  'pariatur',
+  'excepteur',
+  'sint',
+  'occaecat',
+  'cupidatat',
+  'non',
+  'proident',
+  'sunt',
+  'culpa',
+  'qui',
+  'officia',
+  'deserunt',
+  'mollit',
+  'anim',
+  'id',
+  'est',
+  'laborum',
+]
+
+export const loremConversion: GeneratorConversion<string> = {
+  id: 'lorem',
+  name: 'Lorem Ipsum',
+  description: 'Generate lorem ipsum placeholder text',
+  category: 'Typo',
+  type: 'generator',
+  generate: () => {
+    const count = 50
+    const words: Array<string> = []
+    for (let i = 0; i < count; i++) {
+      const randomIndex = Math.floor(Math.random() * loremWords.length)
+      words.push(loremWords[randomIndex])
+    }
+    return words.join(' ')
+  },
+}

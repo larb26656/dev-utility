@@ -1,4 +1,5 @@
 import type {
+  GeneratorConversion,
   NWayConversion,
   OneWayConversion,
   TwoWayConversion,
@@ -7,6 +8,7 @@ import type {
 interface RuntimeConversionBase {
   id: string
   label: string
+  hideInput: boolean
   convert(input: string): Promise<string>
 
   getInputLabel(): string
@@ -31,8 +33,9 @@ function createOneWayRuntime<TIn, TOut>(
 ): RuntimeConversion {
   return {
     id: def.id,
-    label: def.label,
+    label: def.name,
     canSwap: false,
+    hideInput: false,
     getInputLabel: () => 'Input',
     getOutputLabel: () => 'Output',
     convert: async (input: string) => {
@@ -53,8 +56,9 @@ function createTwoWayRuntime<TA, TB>(
 
   return {
     id: def.id,
-    label: def.label,
+    label: def.name,
     canSwap: true,
+    hideInput: false,
     getInputLabel: () => (direction === 'forward' ? def.a.label : def.b.label),
     getOutputLabel: () => (direction === 'forward' ? def.b.label : def.a.label),
     swap: () => (direction = direction === 'forward' ? 'backward' : 'forward'),
@@ -74,13 +78,37 @@ function createTwoWayRuntime<TA, TB>(
   }
 }
 
+function createGeneratorRuntime<TOutput>(
+  def: GeneratorConversion<TOutput>,
+): RuntimeConversion {
+  return {
+    id: def.id,
+    label: def.name,
+    canSwap: false,
+    hideInput: true,
+    getInputLabel: () => 'Parameters (optional)',
+    getOutputLabel: () => 'Generated Output',
+    convert: async (_input: string) => {
+      try {
+        const out = await def.generate()
+        return String(out)
+      } catch (e) {
+        throw new Error(e instanceof Error ? e.message : 'Generation failed')
+      }
+    },
+  }
+}
+
 export function createRuntimeConversion(
   def:
+    | GeneratorConversion<any>
     | OneWayConversion<any, any>
     | TwoWayConversion<any, any>
     | NWayConversion<any>,
 ): RuntimeConversion {
   switch (def.type) {
+    case 'generator':
+      return createGeneratorRuntime(def)
     case 'one-way':
       return createOneWayRuntime(def)
     case 'two-way':

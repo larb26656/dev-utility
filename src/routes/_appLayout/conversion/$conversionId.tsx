@@ -32,8 +32,14 @@ function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleConvert = async () => {
-    if (!conversion || !input) {
+    if (!conversion) {
       return
+    }
+
+    if (!conversion.hideInput) {
+      if (!input) {
+        return
+      }
     }
 
     setIsLoading(true)
@@ -87,21 +93,30 @@ function RouteComponent() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      <div className="grid md:grid-cols-2 gap-6">
-        <InputPanel
-          label={conversion.getInputLabel()}
-          value={input}
-          onChange={setInput}
-          placeholder={`Enter ${conversion.getInputLabel()} ...`}
-          characterCount={input.length}
-        />
+      {conversion.hideInput ? (
         <OutputPanel
           label={conversion.getOutputLabel()}
           value={output}
           error={error}
           onCopy={handleCopy}
         />
-      </div>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-6">
+          <InputPanel
+            label={conversion.getInputLabel()}
+            value={input}
+            onChange={setInput}
+            placeholder={`Enter ${conversion.getInputLabel()} ...`}
+            characterCount={input.length}
+          />
+          <OutputPanel
+            label={conversion.getOutputLabel()}
+            value={output}
+            error={error}
+            onCopy={handleCopy}
+          />
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-3">
         <Button onClick={handleConvert} className="flex-1 min-w-[150px]">
