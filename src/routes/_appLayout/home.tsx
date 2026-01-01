@@ -32,7 +32,7 @@ function RouteComponent() {
                   <ToolCard
                     key={conversion.id}
                     title={conversion.name}
-                    description={''}
+                    description={conversion.description || ''}
                     onClick={() =>
                       navigate({
                         to: '/conversion/$conversionId',

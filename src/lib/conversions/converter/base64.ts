@@ -16,9 +16,9 @@ export function base64Decode(base64: string): string {
 export const base64Conversion: TwoWayConversion<string, string> = {
   id: 'base64',
   name: 'Base64',
+  description: 'Encode and decode text to/from Base64 format',
   category: 'Converter',
   type: 'two-way',
-  label: 'Base64',
   a: {
     label: 'Text',
     convert: (input) => {

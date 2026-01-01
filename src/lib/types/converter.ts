@@ -6,7 +6,7 @@ export type ConversionCategory = 'Hash' | 'Typo' | 'Converter'
 export interface BaseConversion {
   id: string
   name: string
+  description?: string
   type: 'one-way' | 'two-way' | 'n-way'
-  label: string
   category: ConversionCategory
 }
