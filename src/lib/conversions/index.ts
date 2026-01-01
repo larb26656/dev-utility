@@ -1,3 +1,3 @@
-export * from './base64'
+export * from './converter'
 export * from './hash'
 export * from './typo'

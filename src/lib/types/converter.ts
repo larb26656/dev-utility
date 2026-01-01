@@ -2,7 +2,7 @@ export type ConverterFunc<TInput = unknown, TOutput = unknown> = (
   input: TInput,
 ) => TOutput
 
-export type ConversionCategory = 'hash' | 'typo' | 'converter'
+export type ConversionCategory = 'Hash' | 'Typo' | 'Converter'
 export interface BaseConversion {
   id: string
   name: string

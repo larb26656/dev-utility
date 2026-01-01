@@ -9,50 +9,117 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppLayoutRouteRouteImport } from './routes/_appLayout/route'
+import { Route as AppLayoutIndexRouteImport } from './routes/_appLayout/index'
+import { Route as AppLayoutHomeRouteImport } from './routes/_appLayout/home'
+import { Route as AppLayoutConversionConversionIdRouteImport } from './routes/_appLayout/conversion/$conversionId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppLayoutRouteRoute = AppLayoutRouteRouteImport.update({
+  id: '/_appLayout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppLayoutIndexRoute = AppLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppLayoutRouteRoute,
+} as any)
+const AppLayoutHomeRoute = AppLayoutHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppLayoutRouteRoute,
+} as any)
+const AppLayoutConversionConversionIdRoute =
+  AppLayoutConversionConversionIdRouteImport.update({
+    id: '/conversion/$conversionId',
+    path: '/conversion/$conversionId',
+    getParentRoute: () => AppLayoutRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/home': typeof AppLayoutHomeRoute
+  '/': typeof AppLayoutIndexRoute
+  '/conversion/$conversionId': typeof AppLayoutConversionConversionIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/home': typeof AppLayoutHomeRoute
+  '/': typeof AppLayoutIndexRoute
+  '/conversion/$conversionId': typeof AppLayoutConversionConversionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_appLayout': typeof AppLayoutRouteRouteWithChildren
+  '/_appLayout/home': typeof AppLayoutHomeRoute
+  '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_appLayout/conversion/$conversionId': typeof AppLayoutConversionConversionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/home' | '/' | '/conversion/$conversionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/home' | '/' | '/conversion/$conversionId'
+  id:
+    | '__root__'
+    | '/_appLayout'
+    | '/_appLayout/home'
+    | '/_appLayout/'
+    | '/_appLayout/conversion/$conversionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppLayoutRouteRoute: typeof AppLayoutRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_appLayout': {
+      id: '/_appLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppLayoutRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_appLayout/': {
+      id: '/_appLayout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppLayoutIndexRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
+    }
+    '/_appLayout/home': {
+      id: '/_appLayout/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppLayoutHomeRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
+    }
+    '/_appLayout/conversion/$conversionId': {
+      id: '/_appLayout/conversion/$conversionId'
+      path: '/conversion/$conversionId'
+      fullPath: '/conversion/$conversionId'
+      preLoaderRoute: typeof AppLayoutConversionConversionIdRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
     }
   }
 }
 
+interface AppLayoutRouteRouteChildren {
+  AppLayoutHomeRoute: typeof AppLayoutHomeRoute
+  AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutConversionConversionIdRoute: typeof AppLayoutConversionConversionIdRoute
+}
+
+const AppLayoutRouteRouteChildren: AppLayoutRouteRouteChildren = {
+  AppLayoutHomeRoute: AppLayoutHomeRoute,
+  AppLayoutIndexRoute: AppLayoutIndexRoute,
+  AppLayoutConversionConversionIdRoute: AppLayoutConversionConversionIdRoute,
+}
+
+const AppLayoutRouteRouteWithChildren = AppLayoutRouteRoute._addFileChildren(
+  AppLayoutRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppLayoutRouteRoute: AppLayoutRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
