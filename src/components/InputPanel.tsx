@@ -1,22 +1,31 @@
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface InputPanelProps {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder: string;
-  characterCount?: number;
+  label: string
+  value: string
+  onChange: (value: string) => void
+  placeholder: string
+  characterCount?: number
 }
 
-export function InputPanel({ value, onChange, placeholder, characterCount }: InputPanelProps) {
+export function InputPanel({
+  label,
+  value,
+  onChange,
+  placeholder,
+  characterCount,
+}: InputPanelProps) {
   return (
     <Card>
       <CardContent className="p-6">
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center mb-4">
-            <label className="text-sm font-medium">Input</label>
+            <label className="text-sm font-medium">{label}</label>
             {characterCount !== undefined && (
-              <span className="text-xs text-muted-foreground">{characterCount} chars</span>
+              <span className="text-xs text-muted-foreground">
+                {characterCount} chars
+              </span>
             )}
           </div>
           <Textarea
@@ -28,5 +37,5 @@ export function InputPanel({ value, onChange, placeholder, characterCount }: Inp
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

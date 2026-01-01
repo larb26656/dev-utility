@@ -54,13 +54,6 @@ export function ConversionSelector({
           <p className="font-medium text-foreground mb-1">
             {selectedConversion.name}
           </p>
-          <p>{selectedConversion.description}</p>
-          <div className="mt-2 text-xs">
-            <span className="font-medium">Input:</span>{' '}
-            {selectedConversion.inputFormat} →{' '}
-            <span className="font-medium">Output:</span>{' '}
-            {selectedConversion.outputFormat}
-          </div>
         </div>
       )}
     </div>

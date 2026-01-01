@@ -1,24 +1,12 @@
-import { registry } from './conversion-registry';
+import { registry } from './conversion-registry'
 import {
-  thaiToEnglishConversion,
-  englishToThaiConversion,
-  base64EncodeConversion,
-  base64DecodeConversion,
-  md5HashConversion,
-  sha256HashConversion,
-  bcryptHashConversion,
-  jwtDecodeConversion,
-  jwtEncodeConversion,
-} from './conversions';
+  base64Conversion,
+  md5Conversion,
+  upperCaseConversion,
+} from './conversions'
 
-registry.register(thaiToEnglishConversion);
-registry.register(englishToThaiConversion);
-registry.register(base64EncodeConversion);
-registry.register(base64DecodeConversion);
-registry.register(md5HashConversion);
-registry.register(sha256HashConversion);
-registry.register(bcryptHashConversion);
-registry.register(jwtDecodeConversion);
-registry.register(jwtEncodeConversion);
+registry.register(base64Conversion)
+registry.register(md5Conversion)
+registry.register(upperCaseConversion)
 
-export { registry };
+export { registry }

@@ -1,4 +1,4 @@
-import type { ConverterFunc } from './converter'
+import type { BaseConversion, ConverterFunc } from './converter'
 
 export interface IRConversion<TIr, TValue> {
   label: string
@@ -6,7 +6,7 @@ export interface IRConversion<TIr, TValue> {
   valueToIr: ConverterFunc<TValue, TIr>
 }
 
-interface NWayConversion<TIr> {
+export interface NWayConversion<TIr> extends BaseConversion {
   type: 'n-way'
   conversions: IRConversion<TIr, unknown>[]
 }

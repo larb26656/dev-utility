@@ -1,4 +1,4 @@
-import type { Conversion } from './conversion'
+import type { Conversion } from './core'
 
 export interface ConversionRegistry {
   [key: string]: Conversion

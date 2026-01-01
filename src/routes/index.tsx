@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { InputPanel } from '@/components/InputPanel'
 import { OutputPanel } from '@/components/OutputPanel'
@@ -7,6 +7,10 @@ import { ConversionSidebar } from '@/components/ConversionSidebar'
 import { ArrowRight, RefreshCw, Trash2, Menu, X } from 'lucide-react'
 import { registry } from '@/lib'
 import { toast } from 'sonner'
+import {
+  createRuntimeConversion,
+  type RuntimeConversion,
+} from '@/lib/runtime-conversion'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -14,6 +18,7 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   const [selectedConversionId, setSelectedConversionId] = useState<string>()
+  const [conversion, setConversion] = useState<RuntimeConversion | null>(null)
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState('')
@@ -23,7 +28,7 @@ function HomePage() {
   const conversionGroups = registry.getGroups()
 
   const handleConvert = async () => {
-    if (!selectedConversionId || !input) {
+    if (!conversion || !input) {
       return
     }
 
@@ -31,20 +36,9 @@ function HomePage() {
     setError('')
 
     try {
-      const conversion = registry.get(selectedConversionId)
-      if (!conversion) {
-        setError('Conversion not found')
-        return
-      }
-
       const result = await conversion.convert(input)
 
-      if (result.success) {
-        setOutput(String(result.data))
-      } else {
-        setError(result.error)
-        setOutput('')
-      }
+      setOutput(result)
     } catch {
       setError('An unexpected error occurred')
       setOutput('')
@@ -54,13 +48,17 @@ function HomePage() {
   }
 
   const handleSwap = () => {
-    const conversion = registry.get(selectedConversionId || '')
-    if (conversion?.bidirectional && conversion.reverseConversionId) {
-      setInput(output)
-      setSelectedConversionId(conversion.reverseConversionId)
-      setOutput('')
-      setError('')
+    if (!conversion) {
+      return
     }
+
+    if (!conversion.canSwap) {
+      return
+    }
+
+    conversion.swap()
+    setInput(output)
+    setOutput(input)
   }
 
   const handleClear = () => {
@@ -88,8 +86,23 @@ function HomePage() {
     : undefined
 
   const placeholder = selectedConversion
-    ? `Enter ${selectedConversion.inputFormat}...`
+    ? // TODO
+      `Enter 'test' ...`
     : 'Select a conversion type and enter your input...'
+
+  useEffect(() => {
+    if (!selectedConversionId) {
+      return
+    }
+
+    const conversion = registry.get(selectedConversionId)
+    if (!conversion) {
+      setError('Conversion not found')
+      return
+    }
+
+    setConversion(createRuntimeConversion(conversion))
+  }, [selectedConversionId])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
@@ -147,63 +160,73 @@ function HomePage() {
           )}
 
           <main className="flex-1 overflow-y-auto p-4 md:p-6">
-            <div className="max-w-5xl mx-auto space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <InputPanel
-                  value={input}
-                  onChange={setInput}
-                  placeholder={placeholder}
-                  characterCount={input.length}
-                />
-                <OutputPanel value={output} error={error} onCopy={handleCopy} />
-              </div>
+            {!conversion ? (
+              <div>Please select conversion</div>
+            ) : (
+              <div className="max-w-5xl mx-auto space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <InputPanel
+                    label={conversion.getInputLabel()}
+                    value={input}
+                    onChange={setInput}
+                    placeholder={placeholder}
+                    characterCount={input.length}
+                  />
+                  <OutputPanel
+                    label={conversion.getOutputLabel()}
+                    value={output}
+                    error={error}
+                    onCopy={handleCopy}
+                  />
+                </div>
 
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  onClick={handleConvert}
-                  disabled={!selectedConversionId || !input || isLoading}
-                  className="flex-1 min-w-[150px]"
-                >
-                  {isLoading ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                      Converting...
-                    </>
-                  ) : (
-                    <>
-                      <ArrowRight className="w-4 h-4 mr-2" />
-                      Convert
-                    </>
-                  )}
-                </Button>
-
-                {selectedConversion?.bidirectional && (
+                <div className="flex flex-wrap gap-3">
                   <Button
-                    onClick={handleSwap}
-                    variant="outline"
-                    disabled={!output || !!error}
+                    onClick={handleConvert}
+                    disabled={!selectedConversionId || !input || isLoading}
                     className="flex-1 min-w-[150px]"
                   >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Swap Direction
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Converting...
+                      </>
+                    ) : (
+                      <>
+                        <ArrowRight className="w-4 h-4 mr-2" />
+                        Convert
+                      </>
+                    )}
                   </Button>
-                )}
 
-                <Button
-                  onClick={handleClear}
-                  variant="outline"
-                  disabled={!input && !output}
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Clear
-                </Button>
-              </div>
+                  {conversion && conversion.canSwap && (
+                    <Button
+                      onClick={handleSwap}
+                      variant="outline"
+                      disabled={!output || !!error}
+                      className="flex-1 min-w-[150px]"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Swap Direction
+                    </Button>
+                  )}
 
-              <div className="text-center text-xs text-muted-foreground">
-                All conversions are performed client-side. Your data never
-                leaves your browser.
+                  <Button
+                    onClick={handleClear}
+                    variant="outline"
+                    disabled={!input && !output}
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear
+                  </Button>
+                </div>
+
+                <div className="text-center text-xs text-muted-foreground">
+                  All conversions are performed client-side. Your data never
+                  leaves your browser.
+                </div>
               </div>
-            </div>
+            )}
           </main>
         </div>
       </div>

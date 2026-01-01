@@ -1,9 +1,9 @@
+import type { Conversion } from './types/core'
 import type {
-  Registry,
-  Conversion,
   ConversionFilter,
   ConversionGroup,
-} from './types'
+  Registry,
+} from './types/registry'
 
 export class ConversionRegistry implements Registry {
   private conversions: Map<string, Conversion> = new Map()
@@ -28,25 +28,29 @@ export class ConversionRegistry implements Registry {
     return this.getAll().filter((c) => c.category === category)
   }
 
+  // search(filter: ConversionFilter): Conversion[] {
+  //   let results = this.getAll()
+
+  //   if (filter.category) {
+  //     results = results.filter((c) => c.category === filter.category)
+  //   }
+
+  //   if (filter.query) {
+  //     const query = filter.query.toLowerCase()
+  //     results = results.filter(
+  //       (c) =>
+  //         c.name.toLowerCase().includes(query) ||
+  //         c.description.toLowerCase().includes(query) ||
+  //         c.inputFormat.toLowerCase().includes(query) ||
+  //         c.outputFormat.toLowerCase().includes(query),
+  //     )
+  //   }
+
+  //   return results
+  // }
+
   search(filter: ConversionFilter): Conversion[] {
-    let results = this.getAll()
-
-    if (filter.category) {
-      results = results.filter((c) => c.category === filter.category)
-    }
-
-    if (filter.query) {
-      const query = filter.query.toLowerCase()
-      results = results.filter(
-        (c) =>
-          c.name.toLowerCase().includes(query) ||
-          c.description.toLowerCase().includes(query) ||
-          c.inputFormat.toLowerCase().includes(query) ||
-          c.outputFormat.toLowerCase().includes(query),
-      )
-    }
-
-    return results
+    throw new Error('Method not implemented.')
   }
 
   getGroups(): ConversionGroup[] {
