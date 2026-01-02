@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/sidebar'
 import { Separator } from '@/components/ui/separator'
 import { AppBreadcrumb } from '@/components/AppBreadcrumb'
+import { SearchButton } from '@/components/SearchButton'
 
 export const Route = createFileRoute('/_appLayout')({
   component: HomePage,
@@ -29,6 +30,11 @@ function HomePage() {
               className="mr-2 data-[orientation=vertical]:h-4"
             />
             <AppBreadcrumb className="flex-1" />
+            <SearchButton />
+            <Separator
+              orientation="vertical"
+              className="data-[orientation=vertical]:h-4"
+            />
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="p-2 rounded-md hover:bg-accent"

@@ -17,4 +17,11 @@ registry.register(upperCaseConversion)
 registry.register(loremConversion)
 registry.register(uuidConversion)
 
-export { registry }
+const SEARCH_LIST = registry.getAll().map((tool) => ({
+  id: tool.id,
+  name: tool.name,
+  category: tool.category,
+  href: `/tool/${tool.id}`,
+}))
+
+export { registry, SEARCH_LIST }
