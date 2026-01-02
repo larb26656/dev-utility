@@ -1,5 +1,7 @@
 # Dev Utility
 
+![app-screenshot](docs/app-ss.png)
+
 A powerful developer utility application that provides a collection of essential tools for developers, including generators (UUID, Lorem Ipsum) and transformers (Base64, Hashing, Text manipulation).
 
 ## Features

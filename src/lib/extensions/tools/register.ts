@@ -1,4 +1,3 @@
-import { registry } from '@/lib/tools/registry'
 import {
   base64Conversion,
   bcryptConversion,
@@ -8,6 +7,7 @@ import {
   upperCaseConversion,
   uuidConversion,
 } from '.'
+import { registry } from '@/lib/tools/registry'
 
 registry.register(base64Conversion)
 registry.register(md5Conversion)

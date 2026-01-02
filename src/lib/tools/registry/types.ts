@@ -6,7 +6,7 @@ export interface ToolRegistry {
 
 export interface ToolGroup {
   category: string
-  tools: Tool[]
+  tools: Array<Tool>
 }
 
 export interface ToolFilter {
@@ -15,11 +15,11 @@ export interface ToolFilter {
 }
 
 export interface Registry {
-  register(conversion: Tool): void
-  unregister(id: string): void
-  get(id: string): Tool | undefined
-  getAll(): Tool[]
-  getByCategory(category: string): Tool[]
-  search(filter: ToolFilter): Tool[]
-  getGroups(): ToolGroup[]
+  register: (conversion: Tool) => void
+  unregister: (id: string) => void
+  get: (id: string) => Tool | undefined
+  getAll: () => Array<Tool>
+  getByCategory: (category: string) => Array<Tool>
+  search: (filter: ToolFilter) => Array<Tool>
+  getGroups: () => Array<ToolGroup>
 }

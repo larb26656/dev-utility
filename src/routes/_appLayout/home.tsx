@@ -1,7 +1,7 @@
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ToolCard } from '@/components/tool/ToolCard'
 import { Separator } from '@/components/ui/separator'
 import { registry } from '@/lib/extensions/tools/register'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_appLayout/home')({
   component: RouteComponent,

@@ -1,10 +1,10 @@
-import type { TransformerInstance } from '@/lib/tools/transformer'
-import type { Tool } from '@/lib/tools/types'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { ArrowRight, RefreshCw, Trash2 } from 'lucide-react'
 import { InputPanel } from '../panel/InputPanel'
 import { OutputPanel } from '../panel/OutputPanel'
-import { ArrowRight, RefreshCw, Trash2 } from 'lucide-react'
+import type { Tool } from '@/lib/tools/types'
+import type { TransformerInstance } from '@/lib/tools/transformer'
 import { Button } from '@/components/ui/button'
 
 export interface TransformerConsoleProps {

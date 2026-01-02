@@ -1,3 +1,5 @@
+import { useMatches } from '@tanstack/react-router'
+import { Fragment } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,10 +8,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { useMatches } from '@tanstack/react-router'
-import { Fragment } from 'react'
 
-export function AppBreadcrumb() {
+export interface AppBreadcrumbProps {
+  className?: string
+}
+
+export function AppBreadcrumb({ className }: AppBreadcrumbProps) {
   const matches = useMatches()
   const breadcrumbItems = matches
     .filter((match) => match.loaderData?.crumb)
@@ -19,7 +23,7 @@ export function AppBreadcrumb() {
     }))
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className={className}>
       <BreadcrumbList>
         {breadcrumbItems.map((crumb, index) => {
           const isLast = index === breadcrumbItems.length - 1
