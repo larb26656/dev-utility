@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppLayoutRouteRouteImport } from './routes/_appLayout/route'
 import { Route as AppLayoutIndexRouteImport } from './routes/_appLayout/index'
 import { Route as AppLayoutHomeRouteImport } from './routes/_appLayout/home'
-import { Route as AppLayoutConversionConversionIdRouteImport } from './routes/_appLayout/conversion/$conversionId'
+import { Route as AppLayoutToolToolIdRouteImport } from './routes/_appLayout/tool/$toolId'
 
 const AppLayoutRouteRoute = AppLayoutRouteRouteImport.update({
   id: '/_appLayout',
@@ -28,41 +28,40 @@ const AppLayoutHomeRoute = AppLayoutHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AppLayoutRouteRoute,
 } as any)
-const AppLayoutConversionConversionIdRoute =
-  AppLayoutConversionConversionIdRouteImport.update({
-    id: '/conversion/$conversionId',
-    path: '/conversion/$conversionId',
-    getParentRoute: () => AppLayoutRouteRoute,
-  } as any)
+const AppLayoutToolToolIdRoute = AppLayoutToolToolIdRouteImport.update({
+  id: '/tool/$toolId',
+  path: '/tool/$toolId',
+  getParentRoute: () => AppLayoutRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/home': typeof AppLayoutHomeRoute
   '/': typeof AppLayoutIndexRoute
-  '/conversion/$conversionId': typeof AppLayoutConversionConversionIdRoute
+  '/tool/$toolId': typeof AppLayoutToolToolIdRoute
 }
 export interface FileRoutesByTo {
   '/home': typeof AppLayoutHomeRoute
   '/': typeof AppLayoutIndexRoute
-  '/conversion/$conversionId': typeof AppLayoutConversionConversionIdRoute
+  '/tool/$toolId': typeof AppLayoutToolToolIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_appLayout': typeof AppLayoutRouteRouteWithChildren
   '/_appLayout/home': typeof AppLayoutHomeRoute
   '/_appLayout/': typeof AppLayoutIndexRoute
-  '/_appLayout/conversion/$conversionId': typeof AppLayoutConversionConversionIdRoute
+  '/_appLayout/tool/$toolId': typeof AppLayoutToolToolIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/home' | '/' | '/conversion/$conversionId'
+  fullPaths: '/home' | '/' | '/tool/$toolId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/home' | '/' | '/conversion/$conversionId'
+  to: '/home' | '/' | '/tool/$toolId'
   id:
     | '__root__'
     | '/_appLayout'
     | '/_appLayout/home'
     | '/_appLayout/'
-    | '/_appLayout/conversion/$conversionId'
+    | '/_appLayout/tool/$toolId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,11 +91,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutHomeRouteImport
       parentRoute: typeof AppLayoutRouteRoute
     }
-    '/_appLayout/conversion/$conversionId': {
-      id: '/_appLayout/conversion/$conversionId'
-      path: '/conversion/$conversionId'
-      fullPath: '/conversion/$conversionId'
-      preLoaderRoute: typeof AppLayoutConversionConversionIdRouteImport
+    '/_appLayout/tool/$toolId': {
+      id: '/_appLayout/tool/$toolId'
+      path: '/tool/$toolId'
+      fullPath: '/tool/$toolId'
+      preLoaderRoute: typeof AppLayoutToolToolIdRouteImport
       parentRoute: typeof AppLayoutRouteRoute
     }
   }
@@ -105,13 +104,13 @@ declare module '@tanstack/react-router' {
 interface AppLayoutRouteRouteChildren {
   AppLayoutHomeRoute: typeof AppLayoutHomeRoute
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
-  AppLayoutConversionConversionIdRoute: typeof AppLayoutConversionConversionIdRoute
+  AppLayoutToolToolIdRoute: typeof AppLayoutToolToolIdRoute
 }
 
 const AppLayoutRouteRouteChildren: AppLayoutRouteRouteChildren = {
   AppLayoutHomeRoute: AppLayoutHomeRoute,
   AppLayoutIndexRoute: AppLayoutIndexRoute,
-  AppLayoutConversionConversionIdRoute: AppLayoutConversionConversionIdRoute,
+  AppLayoutToolToolIdRoute: AppLayoutToolToolIdRoute,
 }
 
 const AppLayoutRouteRouteWithChildren = AppLayoutRouteRoute._addFileChildren(

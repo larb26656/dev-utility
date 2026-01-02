@@ -12,12 +12,12 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { registry } from '@/lib'
+import { registry } from '@/lib/extensions/tools/register'
 
 interface AppSidebarProps {}
 
 export function AppSidebar({}: AppSidebarProps) {
-  const conversionGroups = registry.getGroups()
+  const toolGroups = registry.getGroups()
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -56,24 +56,24 @@ export function AppSidebar({}: AppSidebarProps) {
               <span>Home</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          {conversionGroups.map((group) => {
+          {toolGroups.map((group) => {
             return (
               <SidebarMenuSubItem key={group.category}>
                 <SidebarMenuButton>{group.category}</SidebarMenuButton>
                 <SidebarMenuSub>
-                  {group.conversions.map((conversion) => {
+                  {group.tools.map((tool) => {
                     return (
-                      <SidebarMenuSubItem key={conversion.id}>
+                      <SidebarMenuSubItem key={tool.id}>
                         <SidebarMenuSubButton
-                          isActive={isActive(`/conversion/${conversion.id}`)}
+                          isActive={isActive(`/tool/${tool.id}`)}
                           onClick={() =>
                             navigate({
-                              to: '/conversion/$conversionId',
-                              params: { conversionId: conversion.id },
+                              to: '/tool/$toolId',
+                              params: { toolId: tool.id },
                             })
                           }
                         >
-                          {conversion.name}
+                          {tool.name}
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     )
