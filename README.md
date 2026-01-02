@@ -1,301 +1,347 @@
-Welcome to your new TanStack app! 
+# Dev Utility
 
-# Getting Started
+A powerful developer utility application that provides a collection of essential tools for developers, including generators (UUID, Lorem Ipsum) and transformers (Base64, Hashing, Text manipulation).
 
-To run this application:
+## Features
+
+- **Generator Tools**: Generate various content like UUIDs, Lorem Ipsum text, and more
+- **Transformer Tools**: Convert and transform data between different formats
+- **Categories**:
+  - **Hash**: MD5, SHA256, Bcrypt
+  - **Typo**: UUID, Lorem Ipsum, Upper Case
+  - **Converter**: Base64 encoding/decoding
+- Modern React application with TypeScript
+- Built with TanStack Router for file-based routing
+- Styled with Tailwind CSS and Radix UI components
+- Responsive design with dark mode support
+
+## Tech Stack
+
+- **Frontend**: React 19, TypeScript
+- **Routing**: TanStack Router
+- **Styling**: Tailwind CSS, Radix UI
+- **Build Tool**: Vite
+- **Testing**: Vitest
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
 
 ```bash
+# Install dependencies
 npm install
-npm run start
 ```
 
-# Building For Production
-
-To build this application for production:
+### Development
 
 ```bash
+# Start development server
+npm run dev
+
+# The app will be available at http://localhost:3000
+```
+
+### Build
+
+```bash
+# Build for production
 npm run build
+
+# Preview production build
+npm run preview
 ```
 
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+### Testing
 
 ```bash
+# Run tests
 npm run test
 ```
 
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+### Code Quality
 
 ```bash
+# Lint code
 npm run lint
+
+# Format code
 npm run format
+
+# Run both linting and formatting
 npm run check
 ```
 
+## Key Points
 
+### Architecture
 
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
+The application is built with a modular tool system that allows easy addition of new utilities:
 
-### Adding A Route
+- **Tool Types**:
+  - `GeneratorTool`: Tools that generate content from scratch
+  - `TransformerTool`: Tools that transform input data into different formats
 
-To add a new route to your application just add another a new file in the `./src/routes` directory.
+- **Transformer Categories**:
+  - `OneWayTransformerTool`: Single-direction transformation
+  - `TwoWayTransformerTool`: Bidirectional transformation (e.g., encode/decode)
 
-TanStack will automatically generate the content of the route file for you.
+- **Tool Registry**: Central registry for managing all available tools
 
-Now that you have two routes you can use a `Link` component to navigate between them.
+### Project Structure
 
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
+```
+src/
+├── components/          # React components
+│   ├── tool/           # Tool-specific components
+│   └── ui/             # Reusable UI components
+├── hooks/              # Custom React hooks
+├── lib/
+│   ├── extensions/
+│   │   └── tools/      # Tool implementations
+│   │       ├── converter/    # Converter tools (Base64)
+│   │       ├── hash/         # Hash tools (MD5, SHA256, Bcrypt)
+│   │       └── typo/         # Text tools (UUID, Lorem, etc.)
+│   └── tools/          # Tool core architecture
+│       ├── generator/  # Generator tool framework
+│       ├── transformer/ # Transformer tool framework
+│       └── registry/   # Tool registry
+└── routes/             # TanStack Router routes
 ```
 
-Then anywhere in your JSX you can use it like so:
+## Contributing
 
-```tsx
-<Link to="/about">About</Link>
-```
+Contributions are welcome! The most common way to contribute is by adding new tools. Below are detailed guides on how to create Generator Tools and Transformer Tools.
 
-This will create a link that will navigate to the `/about` route.
+### Creating a Generator Tool
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+Generator tools create content from scratch without requiring input. Examples include UUID generators, Lorem Ipsum generators, etc.
 
-### Using A Layout
+#### Step 1: Create the Generator Tool
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
+Create a new file in the appropriate category directory under `src/lib/extensions/tools/`. For example, to create a timestamp generator:
 
-Here is an example layout that includes a header:
+```typescript
+// src/lib/extensions/tools/typo/timestamp.ts
 
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { createGeneratorTool } from '@/lib/tools/generator/factory'
 
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
+export const timestampConversion = createGeneratorTool<string>({
+  id: 'timestamp',
+  name: 'Timestamp',
+  description: 'Generate current Unix timestamp',
+  category: 'Typo',
+  generate: () => {
+    return Date.now().toString()
+  },
 })
 ```
 
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
+#### Step 2: Export the Tool
 
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+Add the export to the category's index file:
 
+```typescript
+// src/lib/extensions/tools/typo/index.ts
 
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
+export * from './lorem'
+export * from './upper-case'
+export * from './uuid'
+export * from './timestamp' // Add this line
 ```
 
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
+#### Step 3: Register the Tool
 
-### React-Query
+Register the tool in the registry file:
 
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
+```typescript
+// src/lib/extensions/tools/register.ts
 
-First add your dependencies:
+import {
+  base64Conversion,
+  bcryptConversion,
+  loremConversion,
+  md5Conversion,
+  sha256Conversion,
+  upperCaseConversion,
+  uuidConversion,
+  timestampConversion, // Add this import
+} from '.'
+
+// Register all tools
+registry.register(base64Conversion)
+registry.register(md5Conversion)
+registry.register(sha256Conversion)
+registry.register(bcryptConversion)
+registry.register(upperCaseConversion)
+registry.register(loremConversion)
+registry.register(uuidConversion)
+registry.register(timestampConversion) // Add this line
+```
+
+#### Step 4: Define Category (if needed)
+
+If you're creating a new category, add it to the `ToolCategory` type:
+
+```typescript
+// src/lib/tools/types.ts
+
+export type ToolCategory = 'Hash' | 'Typo' | 'Converter' | 'YourNewCategory'
+```
+
+#### Generator Tool Interface
+
+```typescript
+interface GeneratorTool<T> {
+  type: 'generator'
+  id: string // Unique identifier (e.g., 'uuid')
+  name: string // Display name (e.g., 'UUID Generator')
+  description?: string // Optional description
+  category: ToolCategory // Category for grouping
+  generate(): T | Promise<T> // Function that generates the content
+}
+```
+
+### Creating a Transformer Tool
+
+Transformer tools convert input data into different formats. They come in two types:
+
+- **OneWay**: Single direction transformation (e.g., Text → Uppercase)
+- **TwoWay**: Bidirectional transformation (e.g., Base64 encode/decode)
+
+#### Step 1: Create the Transformer Tool
+
+Create a new file in the appropriate category directory. Here are examples for each type:
+
+##### One-Way Transformer
+
+```typescript
+// src/lib/extensions/tools/typo/lower-case.ts
+
+import { createOneWayTransformerTool } from '@/lib/tools/transformer'
+
+export const lowerCaseConversion = createOneWayTransformerTool<string, string>({
+  id: 'lower-case',
+  name: 'Lower Case',
+  description: 'Convert text to lowercase',
+  category: 'Typo',
+  inputLabel: 'Text',
+  outputLabel: 'Lower Case',
+  transform: (input) => input.toLowerCase(),
+})
+```
+
+##### Two-Way Transformer
+
+```typescript
+// src/lib/extensions/tools/converter/url-encode.ts
+
+import { createTwoWayTransformerTool } from '@/lib/tools/transformer'
+
+function urlEncode(text: string): string {
+  return encodeURIComponent(text)
+}
+
+function urlDecode(text: string): string {
+  return decodeURIComponent(text)
+}
+
+export const urlEncodeConversion = createTwoWayTransformerTool<string, string>({
+  id: 'url-encode',
+  name: 'URL Encode',
+  description: 'Encode and decode URLs',
+  category: 'Converter',
+  a: {
+    label: 'URL',
+    convert: urlEncode,
+  },
+  b: {
+    label: 'Encoded',
+    convert: urlDecode,
+  },
+})
+```
+
+#### Step 2: Export and Register
+
+Follow the same steps as for Generator Tools:
+
+1. Add export to category index file
+2. Import and register in `src/lib/extensions/tools/register.ts`
+
+#### Transformer Tool Interfaces
+
+```typescript
+// One-Way Transformer
+interface OneWayTransformerTool<TInput, TOutput> {
+  type: 'transformer'
+  variant: 'one-way'
+  id: string
+  name: string
+  description?: string
+  category: ToolCategory
+  inputLabel: string
+  outputLabel: string
+  transform(input: TInput): TOutput | Promise<TOutput>
+}
+
+// Two-Way Transformer
+interface TwoWayTransformerTool<TA, TB> {
+  type: 'transformer'
+  variant: 'two-way'
+  id: string
+  name: string
+  description?: string
+  category: ToolCategory
+  a: {
+    label: string
+    convert(input: TA): TB | Promise<TB>
+  }
+  b: {
+    label: string
+    convert(input: TB): TA | Promise<TA>
+  }
+}
+```
+
+### Best Practices
+
+1. **Tool IDs**: Use kebab-case for unique identifiers (e.g., 'base64', 'url-encode')
+2. **TypeScript**: Always use proper TypeScript types for input and output
+3. **Error Handling**: Handle potential errors in your transformation/generation logic
+4. **Async Operations**: Use async/await if your operations are asynchronous
+5. **Validation**: Validate inputs when necessary (especially for transformers)
+6. **Documentation**: Add clear descriptions for tools
+7. **Category Placement**: Choose the most appropriate category or create a new one
+
+### Testing Tools
+
+When adding new tools, ensure you test them:
 
 ```bash
-npm install @tanstack/react-query @tanstack/react-query-devtools
+# Run existing tests
+npm run test
 ```
 
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
+You can create test files in the appropriate `__tests__` directories following the project's testing conventions.
 
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+### Code Style
 
-// ...
-
-const queryClient = new QueryClient();
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default App;
-```
-
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
+This project uses ESLint and Prettier for code formatting:
 
 ```bash
-npm install @tanstack/store
+# Check and fix code style
+npm run check
 ```
 
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
+## License
 
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
+This project is private and proprietary.
 
-const countStore = new Store(0);
+## Support
 
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+For issues, questions, or contributions, please refer to the project maintainers.
