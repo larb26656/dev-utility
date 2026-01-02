@@ -1,8 +1,8 @@
-import type { Tool } from '@/lib/tools/types'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { OutputPanel } from '../panel/OutputPanel'
 import { ArrowRight, RefreshCw } from 'lucide-react'
+import { OutputPanel } from '../panel/OutputPanel'
+import type { Tool } from '@/lib/tools/types'
 import type { GeneratorInstance } from '@/lib/tools/generator'
 import { Button } from '@/components/ui/button'
 

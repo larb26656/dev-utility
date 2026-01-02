@@ -1,4 +1,5 @@
 import { HomeIcon, Settings } from 'lucide-react'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import {
   Sidebar,
   SidebarContent,
@@ -11,12 +12,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
-import { useLocation, useNavigate } from '@tanstack/react-router'
 import { registry } from '@/lib/extensions/tools/register'
 
-interface AppSidebarProps {}
-
-export function AppSidebar({}: AppSidebarProps) {
+export function AppSidebar() {
   const toolGroups = registry.getGroups()
   const navigate = useNavigate()
 

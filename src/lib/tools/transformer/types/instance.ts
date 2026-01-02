@@ -1,7 +1,7 @@
 interface TransformerInstanceBase {
-  convert(input: string): Promise<string>
-  getInputLabel(): string
-  getOutputLabel(): string
+  convert: (input: string) => Promise<string>
+  getInputLabel: () => string
+  getOutputLabel: () => string
 }
 
 export interface NonSwappableTransformerInstance extends TransformerInstanceBase {
@@ -10,7 +10,7 @@ export interface NonSwappableTransformerInstance extends TransformerInstanceBase
 
 export interface SwappableTransformerInstance extends TransformerInstanceBase {
   canSwap: true
-  swap(): void
+  swap: () => void
 }
 
 export type TransformerInstance =

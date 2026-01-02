@@ -1,5 +1,5 @@
 import type { Tool } from '../types'
-import type { ToolFilter, ToolGroup, Registry } from './types'
+import type { Registry, ToolFilter, ToolGroup } from './types'
 
 export class ToolRegistryImpl implements Registry {
   private tools: Map<string, Tool> = new Map()
@@ -16,11 +16,11 @@ export class ToolRegistryImpl implements Registry {
     return this.tools.get(id)
   }
 
-  getAll(): Tool[] {
+  getAll(): Array<Tool> {
     return Array.from(this.tools.values())
   }
 
-  getByCategory(category: string): Tool[] {
+  getByCategory(category: string): Array<Tool> {
     return this.getAll().filter((c) => c.category === category)
   }
 
@@ -45,12 +45,12 @@ export class ToolRegistryImpl implements Registry {
   //   return results
   // }
 
-  search(_: ToolFilter): Tool[] {
+  search(_: ToolFilter): Array<Tool> {
     throw new Error('Method not implemented.')
   }
 
-  getGroups(): ToolGroup[] {
-    const categoryMap = new Map<string, Tool[]>()
+  getGroups(): Array<ToolGroup> {
+    const categoryMap = new Map<string, Array<Tool>>()
 
     this.getAll().forEach((conversion) => {
       const group = categoryMap.get(conversion.category) || []

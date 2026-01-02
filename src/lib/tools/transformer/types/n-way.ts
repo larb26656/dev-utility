@@ -10,5 +10,5 @@ export interface IRTransformerTool<TIr, TValue> {
 export interface NWayTransformerTool<TIr> extends BaseTool {
   type: 'transformer'
   transformType: 'n-way'
-  conversions: IRTransformerTool<TIr, unknown>[]
+  conversions: Array<IRTransformerTool<TIr, unknown>>
 }

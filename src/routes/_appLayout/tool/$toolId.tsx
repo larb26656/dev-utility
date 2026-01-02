@@ -1,9 +1,9 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { GeneratorConsole } from '@/components/tool/console/GeneratorConsole'
 import { TransformerConsole } from '@/components/tool/console/TransformerConsole'
 import { registry } from '@/lib/extensions/tools/register'
 import { createGeneratorInstance } from '@/lib/tools/generator'
 import { createTransformerInstance } from '@/lib/tools/transformer'
-import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_appLayout/tool/$toolId')({
   component: RouteComponent,
