@@ -45,7 +45,7 @@ export class ToolRegistryImpl implements Registry {
   //   return results
   // }
 
-  search(filter: ToolFilter): Tool[] {
+  search(_: ToolFilter): Tool[] {
     throw new Error('Method not implemented.')
   }
 
