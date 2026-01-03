@@ -18,25 +18,34 @@ export const Route = createFileRoute('/_appLayout/tool/$toolId')({
 
     return { tool, crumb: tool.name }
   },
+  validateSearch: (search: Record<string, unknown>) => ({
+    inputFormat: (search.inputFormat as string) ?? '',
+    outputFormat: (search.outputFormat as string) ?? '',
+  }),
 })
 
 function RouteComponent() {
   const { tool } = Route.useLoaderData()
+  const { toolId } = Route.useParams()
+  const search = Route.useSearch()
 
   if (tool.type === 'generator') {
     const instance = createGeneratorInstance(tool)
-    return <GeneratorConsole tool={tool} instance={instance} />
+    return <GeneratorConsole key={toolId} tool={tool} instance={instance} />
   } else {
     const instance = createTransformerInstance(tool)
     if (tool.transformType === 'n-way') {
       return (
         <NWayTransformerConsole
+          key={toolId}
           tool={tool}
           instance={instance as NWayTransformerInstance}
+          defaultInputFormat={search.inputFormat}
+          defaultOutputFormat={search.outputFormat}
         />
       )
     } else {
-      return <TransformerConsole tool={tool} instance={instance} />
+      return <TransformerConsole key={toolId} tool={tool} instance={instance} />
     }
   }
 

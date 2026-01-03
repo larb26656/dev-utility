@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { getErrorMessage } from '@/utils'
 
 export interface NWayTransformerConsoleProps {
   tool: Tool
@@ -57,7 +58,8 @@ export function NWayTransformerConsole({
       setOutput(result)
     } catch (e) {
       console.error(e)
-      setError('An unexpected error occurred')
+      const errMsg = getErrorMessage(e)
+      setError(errMsg)
       setOutput('')
     } finally {
       setIsLoading(false)
@@ -92,11 +94,18 @@ export function NWayTransformerConsole({
 
   useEffect(() => {
     instance.setInputFormat(inputFormat)
-  }, [inputFormat])
+  }, [inputFormat, instance])
 
   useEffect(() => {
     instance.setOutputFormat(outputFormat)
-  }, [outputFormat])
+  }, [outputFormat, instance])
+
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('inputFormat', inputFormat)
+    url.searchParams.set('outputFormat', outputFormat)
+    window.history.replaceState({}, '', url.toString())
+  }, [inputFormat, outputFormat])
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">

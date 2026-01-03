@@ -5,6 +5,7 @@ import { OutputPanel } from '../panel/OutputPanel'
 import type { Tool } from '@/lib/tools/types'
 import type { GeneratorInstance } from '@/lib/tools/generator'
 import { Button } from '@/components/ui/button'
+import { getErrorMessage } from '@/utils'
 
 export interface GeneratorConsoleProps {
   tool: Tool
@@ -25,8 +26,8 @@ export function GeneratorConsole({ instance }: GeneratorConsoleProps) {
 
       setOutput(result)
     } catch (e) {
-      console.error(e)
-      setError('An unexpected error occurred')
+      const errMsg = getErrorMessage(e)
+      setError(errMsg)
       setOutput('')
     } finally {
       setIsLoading(false)

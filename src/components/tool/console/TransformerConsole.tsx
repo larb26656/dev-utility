@@ -6,6 +6,7 @@ import { OutputPanel } from '../panel/OutputPanel'
 import type { Tool } from '@/lib/tools/types'
 import type { TransformerInstance } from '@/lib/tools/transformer'
 import { Button } from '@/components/ui/button'
+import { getErrorMessage } from '@/utils'
 
 export interface TransformerConsoleProps {
   tool: Tool
@@ -32,8 +33,8 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
 
       setOutput(result)
     } catch (e) {
-      console.error(e)
-      setError('An unexpected error occurred')
+      const errMsg = getErrorMessage(e)
+      setError(errMsg)
       setOutput('')
     } finally {
       setIsLoading(false)
