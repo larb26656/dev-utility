@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs'
 import { createOneWayTransformerTool } from '@/lib/tools/transformer'
 
-export const bcryptConversion = createOneWayTransformerTool<string, string>({
+export const bcryptTool = createOneWayTransformerTool<string, string>({
   id: 'bcrypt',
   name: 'Bcrypt',
   description: 'Generate bcrypt hash from input text',

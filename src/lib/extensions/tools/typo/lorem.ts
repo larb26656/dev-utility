@@ -65,7 +65,7 @@ const loremWords = [
   'laborum',
 ]
 
-export const loremConversion = createGeneratorTool<string>({
+export const loremTool = createGeneratorTool<string>({
   id: 'lorem',
   name: 'Lorem Ipsum',
   description: 'Generate lorem ipsum placeholder text',

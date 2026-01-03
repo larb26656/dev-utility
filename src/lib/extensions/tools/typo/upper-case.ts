@@ -1,6 +1,6 @@
 import { createOneWayTransformerTool } from '@/lib/tools/transformer'
 
-export const upperCaseConversion = createOneWayTransformerTool<string, string>({
+export const upperCaseTool = createOneWayTransformerTool<string, string>({
   id: 'uppercase',
   name: 'Uppercase',
   description: 'Convert text to uppercase letters',

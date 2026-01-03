@@ -1,22 +1,22 @@
 import {
-  base64Conversion,
-  bcryptConversion,
+  base64Tool,
+  bcryptTool,
   dataFormatTool,
-  loremConversion,
-  md5Conversion,
-  sha256Conversion,
-  upperCaseConversion,
-  uuidConversion,
+  loremTool,
+  md5Tool,
+  sha256Tool,
+  upperCaseTool,
+  uuidTool,
 } from '.'
 import { registry } from '@/lib/tools/registry'
 
-registry.register(base64Conversion)
-registry.register(md5Conversion)
-registry.register(sha256Conversion)
-registry.register(bcryptConversion)
-registry.register(upperCaseConversion)
-registry.register(loremConversion)
-registry.register(uuidConversion)
+registry.register(base64Tool)
+registry.register(md5Tool)
+registry.register(sha256Tool)
+registry.register(bcryptTool)
+registry.register(upperCaseTool)
+registry.register(loremTool)
+registry.register(uuidTool)
 registry.register(dataFormatTool)
 
 const SEARCH_LIST = registry.getAll().map((tool) => ({

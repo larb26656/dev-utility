@@ -13,7 +13,7 @@ export function base64Decode(base64: string): string {
   return new TextDecoder().decode(bytes)
 }
 
-export const base64Conversion = createTwoWayTransformerTool<string, string>({
+export const base64Tool = createTwoWayTransformerTool<string, string>({
   id: 'base64',
   name: 'Base64',
   description: 'Encode and decode text to/from Base64 format',

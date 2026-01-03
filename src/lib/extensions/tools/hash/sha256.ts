@@ -1,7 +1,7 @@
 import * as crypto from 'crypto-js'
 import { createOneWayTransformerTool } from '@/lib/tools/transformer'
 
-export const sha256Conversion = createOneWayTransformerTool<string, string>({
+export const sha256Tool = createOneWayTransformerTool<string, string>({
   id: 'sha256',
   name: 'SHA-256',
   description: 'Generate SHA-256 hash from input text',
