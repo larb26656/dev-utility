@@ -25,12 +25,12 @@ export function InputPanel({
 }: InputPanelProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex justify-between items-center mb-4  h-10">
+      <div className="flex justify-between items-center mb-4 h-10 gap-2">
         {labelComponent || (
           <label className="text-sm font-medium">{label}</label>
         )}
         {characterCount !== undefined && (
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground shrink-0">
             {characterCount} chars
           </span>
         )}
@@ -42,12 +42,6 @@ export function InputPanel({
           value={value}
           onChange={(val) => onChange(val || '')}
           theme="vs-dark"
-          options={{
-            minimap: { enabled: false },
-            fontSize: 14,
-            scrollBeyondLastLine: false,
-            automaticLayout: true,
-          }}
         />
       ) : (
         <Textarea

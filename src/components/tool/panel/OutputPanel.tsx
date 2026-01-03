@@ -25,7 +25,7 @@ export function OutputPanel({
 }: OutputPanelProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex justify-between items-center mb-4 h-10">
+      <div className="flex justify-between items-center mb-4 h-10 gap-2">
         {labelComponent || (
           <label className="text-sm font-medium">{label}</label>
         )}
@@ -34,6 +34,7 @@ export function OutputPanel({
           size="sm"
           onClick={onCopy}
           disabled={!value && !error}
+          className="shrink-0"
         >
           <Copy className="w-4 h-4 mr-2" />
           Copy

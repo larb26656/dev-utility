@@ -5,6 +5,7 @@ import { OutputPanel } from '../panel/OutputPanel'
 import type { Tool } from '@/lib/tools/types'
 import type { GeneratorInstance } from '@/lib/tools/generator'
 import { Button } from '@/components/ui/button'
+import { FloatingActionBar } from '@/components/ui/floating-action-bar'
 import { getErrorMessage } from '@/utils'
 
 export interface GeneratorConsoleProps {
@@ -49,7 +50,7 @@ export function GeneratorConsole({ instance }: GeneratorConsoleProps) {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="w-full max-w-5xl mx-auto space-y-4 md:space-y-6 px-4 pb-24 md:pb-6">
       <OutputPanel
         label={instance.getOutputLabel()}
         value={output}
@@ -57,26 +58,30 @@ export function GeneratorConsole({ instance }: GeneratorConsoleProps) {
         onCopy={handleCopy}
       />
 
-      <div className="flex flex-wrap gap-3">
-        <Button onClick={handleGenerate} className="flex-1 min-w-[150px]">
+      <div className="text-center text-[10px] md:text-xs text-muted-foreground leading-tight px-2">
+        All conversions are performed client-side. Your data never leaves your
+        browser.
+      </div>
+
+      <FloatingActionBar>
+        <Button
+          onClick={handleGenerate}
+          className="flex-1 min-w-[120px] md:min-w-[150px] h-10 md:h-auto"
+        >
           {isLoading ? (
             <>
-              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-              Generate...
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              <span className="hidden sm:inline">Generate...</span>
+              <span className="sm:hidden">Gen...</span>
             </>
           ) : (
             <>
-              <ArrowRight className="w-4 h-4 mr-2" />
+              <ArrowRight className="w-4 h-4" />
               Generate
             </>
           )}
         </Button>
-      </div>
-
-      <div className="text-center text-xs text-muted-foreground">
-        All conversions are performed client-side. Your data never leaves your
-        browser.
-      </div>
+      </FloatingActionBar>
     </div>
   )
 }
