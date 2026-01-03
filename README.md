@@ -268,6 +268,63 @@ export const urlEncodeConversion = createTwoWayTransformerTool<string, string>({
 })
 ```
 
+##### N-Way Transformer
+
+N-Way transformers allow conversion between multiple formats using an intermediate representation (IR). Each format has functions to convert to and from the IR.
+
+```typescript
+// src/lib/extensions/tools/converter/color-formats.ts
+
+import { createNWayTransformerTool } from '@/lib/tools/transformer'
+
+export const colorFormatsTool = createNWayTransformerTool<
+  {
+    hex: string
+    rgb: string
+    hsl: string
+  },
+  { r: number; g: number; b: number }
+>({
+  id: 'color-formats',
+  name: 'Color Formats',
+  description: 'Convert between different color formats',
+  category: 'Converter',
+
+  transformers: {
+    hex: {
+      toIR: (hex) => {
+        const r = parseInt(hex.slice(1, 3), 16)
+        const g = parseInt(hex.slice(3, 5), 16)
+        const b = parseInt(hex.slice(5, 7), 16)
+        return { r, g, b }
+      },
+      fromIR: (ir) =>
+        `#${ir.r.toString(16).padStart(2, '0')}${ir.g.toString(16).padStart(2, '0')}${ir.b.toString(16).padStart(2, '0')}`,
+    },
+    rgb: {
+      toIR: (rgb) => {
+        const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/)
+        if (!match) throw new Error('Invalid RGB format')
+        return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]) }
+      },
+      fromIR: (ir) => `rgb(${ir.r}, ${ir.g}, ${ir.b})`,
+    },
+    hsl: {
+      toIR: (hsl) => {
+        const match = hsl.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)
+        if (!match) throw new Error('Invalid HSL format')
+        const h = Number(match[1]) / 360
+        const s = Number(match[2]) / 100
+        const l = Number(match[3]) / 100
+        // HSL to RGB conversion logic here
+        return { r: 0, g: 0, b: 0 } // Simplified for example
+      },
+      fromIR: (ir) => `hsl(0, 0%, 0%)`, // Simplified for example
+    },
+  },
+})
+```
+
 #### Step 2: Export and Register
 
 Follow the same steps as for Generator Tools:
