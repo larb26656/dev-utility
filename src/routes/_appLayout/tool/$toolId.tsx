@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
 import type { NWayTransformerInstance } from '@/lib/tools/transformer'
 import { GeneratorConsole } from '@/components/tool/console/GeneratorConsole'
 import { TransformerConsole } from '@/components/tool/console/TransformerConsole'
@@ -6,6 +7,11 @@ import { registry } from '@/lib/extensions/tools/register'
 import { createGeneratorInstance } from '@/lib/tools/generator'
 import { createTransformerInstance } from '@/lib/tools/transformer'
 import { NWayTransformerConsole } from '@/components/tool/console/NWayTransformerConsole'
+
+const toolSearchSchema = z.object({
+  inputFormat: z.string().optional(),
+  outputFormat: z.string().optional(),
+})
 
 export const Route = createFileRoute('/_appLayout/tool/$toolId')({
   component: RouteComponent,
@@ -18,10 +24,7 @@ export const Route = createFileRoute('/_appLayout/tool/$toolId')({
 
     return { tool, crumb: tool.name }
   },
-  validateSearch: (search: Record<string, unknown>) => ({
-    inputFormat: (search.inputFormat as string) ?? '',
-    outputFormat: (search.outputFormat as string) ?? '',
-  }),
+  validateSearch: toolSearchSchema,
 })
 
 function RouteComponent() {

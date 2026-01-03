@@ -23,7 +23,6 @@ export interface NWayTransformerConsoleProps {
 }
 
 export function NWayTransformerConsole({
-  tool,
   instance,
   defaultInputFormat,
   defaultOutputFormat,
