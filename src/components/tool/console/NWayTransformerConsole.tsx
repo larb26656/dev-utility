@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { ArrowDown, ArrowRight, RefreshCw, Trash2 } from 'lucide-react'
+import { ArrowRight, RefreshCw, Trash2 } from 'lucide-react'
 import { InputPanel } from '../panel/InputPanel'
 import { OutputPanel } from '../panel/OutputPanel'
 import type { Tool } from '@/lib/tools/types'
@@ -23,6 +23,7 @@ export interface NWayTransformerConsoleProps {
 }
 
 export function NWayTransformerConsole({
+  tool,
   instance,
   defaultInputFormat,
   defaultOutputFormat,
@@ -109,54 +110,53 @@ export function NWayTransformerConsole({
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 min-w-[200px] flex justify-center">
-          <Select value={inputFormat} onValueChange={setInputFormat}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select input format" />
-            </SelectTrigger>
-            <SelectContent>
-              {formats.map((format) => (
-                <SelectItem key={format} value={format}>
-                  {format}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center justify-center">
-          <ArrowRight className="w-4 h-4 hidden md:block" />
-          <ArrowDown className="w-6 h-6 block md:hidden" />
-        </div>
-        <div className="flex-1 min-w-[200px] flex justify-center">
-          <Select value={outputFormat} onValueChange={setOutputFormat}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select output format" />
-            </SelectTrigger>
-            <SelectContent>
-              {availableOutputFormats.map((format) => (
-                <SelectItem key={format} value={format}>
-                  {format}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
       <div className="grid md:grid-cols-2 gap-6">
         <InputPanel
           label={inputFormat || 'Input'}
+          labelComponent={
+            <div className="flex items-center gap-2">
+              <Select value={inputFormat} onValueChange={setInputFormat}>
+                <SelectTrigger className="w-[180px] h-8">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  {formats.map((format) => (
+                    <SelectItem key={format} value={format}>
+                      {format}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          }
           value={input}
           onChange={setInput}
           placeholder={`Enter ${inputFormat || 'input'} ...`}
           characterCount={input.length}
+          enableMonaco={true}
         />
         <OutputPanel
           label={outputFormat || 'Output'}
+          labelComponent={
+            <div className="flex items-center gap-2">
+              <Select value={outputFormat} onValueChange={setOutputFormat}>
+                <SelectTrigger className="w-[180px] h-8">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableOutputFormats.map((format) => (
+                    <SelectItem key={format} value={format}>
+                      {format}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          }
           value={output}
           error={error}
           onCopy={handleCopy}
+          enableMonaco={true}
         />
       </div>
       <div className="flex flex-wrap gap-3">

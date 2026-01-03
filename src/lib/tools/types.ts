@@ -7,14 +7,6 @@ import type {
 
 export type ToolCategory = 'Hash' | 'Typo' | 'Converter'
 
-// export interface Tool {
-//   id: string
-//   name: string
-//   description?: string
-//   type: 'transformer' | 'generator'
-//   category: ToolCategory
-// }
-
 export interface BaseTool {
   id: string
   name: string
