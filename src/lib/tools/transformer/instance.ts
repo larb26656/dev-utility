@@ -4,17 +4,20 @@ import type {
   TransformerInstance,
   TwoWayTransformerTool,
 } from './types'
+import type { NWayTransformerTool } from './types/n-way'
+import type { NWayTransformerInstance } from './types/instance'
 
-function createOneWayInstace<TIn, TOut>(
-  def: OneWayTransformerTool<TIn, TOut>,
+function createOneWayInstace<TInput, TOutput>(
+  def: OneWayTransformerTool<TInput, TOutput>,
 ): TransformerInstance {
   return {
+    type: 'one-way',
     canSwap: false,
     getInputLabel: () => def.inputLabel ?? 'Input',
     getOutputLabel: () => def.inputLabel ?? 'Output',
     convert: async (input: string) => {
       try {
-        const out = await def.convert(input as TIn)
+        const out = await def.convert(input as TInput)
         return String(out)
       } catch (e) {
         throw new Error(e instanceof Error ? e.message : 'Conversion failed')
@@ -23,12 +26,13 @@ function createOneWayInstace<TIn, TOut>(
   }
 }
 
-function createTwoWayInstance<TA, TB>(
-  def: TwoWayTransformerTool<TA, TB>,
+function createTwoWayInstance<TInput, TOutput>(
+  def: TwoWayTransformerTool<TInput, TOutput>,
 ): TransformerInstance {
   let direction: 'forward' | 'backward' = 'forward'
 
   return {
+    type: 'two-way',
     canSwap: true,
     getInputLabel: () => (direction === 'forward' ? def.a.label : def.b.label),
     getOutputLabel: () => (direction === 'forward' ? def.b.label : def.a.label),
@@ -37,8 +41,8 @@ function createTwoWayInstance<TA, TB>(
       try {
         const out =
           direction === 'forward'
-            ? await def.a.convert(input as TA)
-            : await def.b.convert(input as TB)
+            ? await def.a.convert(input as TInput)
+            : await def.b.convert(input as TOutput)
 
         return String(out)
       } catch (e) {
@@ -46,6 +50,54 @@ function createTwoWayInstance<TA, TB>(
         throw new Error(e instanceof Error ? e.message : 'Conversion failed')
       }
     },
+  }
+}
+
+function createNWayInstance<TFormat extends Record<string, any>, TIntermediate>(
+  def: NWayTransformerTool<TFormat, TIntermediate>,
+): NWayTransformerInstance {
+  let direction: 'forward' | 'backward' = 'forward'
+  let inputFormat: string | null = null
+  let outputFormat: string | null = null
+
+  return {
+    type: 'n-way',
+    canSwap: true,
+    swap: () => (direction = direction === 'forward' ? 'backward' : 'forward'),
+    getInputLabel: () =>
+      direction === 'forward'
+        ? (inputFormat ?? 'Input')
+        : (inputFormat ?? 'Output'),
+    getOutputLabel: () =>
+      direction === 'forward'
+        ? (inputFormat ?? 'Ouput')
+        : (inputFormat ?? 'Input'),
+    convert: async (input: string) => {
+      if (inputFormat === null) {
+        throw new Error("Input format can't be null")
+      }
+
+      if (outputFormat === null) {
+        throw new Error("Output format can't be null")
+      }
+
+      try {
+        const out =
+          direction === 'forward'
+            ? await def.convert(inputFormat, outputFormat, input as any)
+            : await def.convert(outputFormat, inputFormat, input as any)
+
+        return String(out)
+      } catch (e) {
+        console.error(e)
+        throw new Error(e instanceof Error ? e.message : 'Conversion failed')
+      }
+    },
+    getFormats: () => Object.keys(def.transformers),
+    getInputFormat: () => inputFormat,
+    setInputFormat: (value: string) => (inputFormat = value),
+    getOutputFormat: () => outputFormat,
+    setOutputFormat: (value: string) => (outputFormat = value),
   }
 }
 
@@ -57,6 +109,8 @@ export function createTransformerInstance(
       return createOneWayInstace(def)
     case 'two-way':
       return createTwoWayInstance(def)
+    case 'n-way':
+      return createNWayInstance(def)
     default:
       throw new Error('Non transformer tool not support')
   }

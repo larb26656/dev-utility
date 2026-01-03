@@ -17,9 +17,10 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
   const [output, setOutput] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const isCanConvert = !!input
 
   const handleConvert = async () => {
-    if (!input) {
+    if (!isCanConvert) {
       return
     }
 
@@ -30,7 +31,8 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
       const result = await instance.convert(input)
 
       setOutput(result)
-    } catch {
+    } catch (e) {
+      console.error(e)
       setError('An unexpected error occurred')
       setOutput('')
     } finally {
@@ -39,10 +41,6 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
   }
 
   const handleSwap = () => {
-    if (!instance) {
-      return
-    }
-
     if (!instance.canSwap) {
       return
     }
@@ -91,7 +89,11 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Button onClick={handleConvert} className="flex-1 min-w-[150px]">
+        <Button
+          onClick={handleConvert}
+          className="flex-1 min-w-[150px]"
+          disabled={!isCanConvert}
+        >
           {isLoading ? (
             <>
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />

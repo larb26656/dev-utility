@@ -1,6 +1,7 @@
 import {
   base64Conversion,
   bcryptConversion,
+  dataFormatTool,
   loremConversion,
   md5Conversion,
   sha256Conversion,
@@ -16,6 +17,7 @@ registry.register(bcryptConversion)
 registry.register(upperCaseConversion)
 registry.register(loremConversion)
 registry.register(uuidConversion)
+registry.register(dataFormatTool)
 
 const SEARCH_LIST = registry.getAll().map((tool) => ({
   id: tool.id,

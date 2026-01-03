@@ -78,5 +78,5 @@ export const loremConversion = createGeneratorTool<string>({
     }
     return words.join(' ')
   },
-  category: 'Hash',
+  category: 'Typo',
 })

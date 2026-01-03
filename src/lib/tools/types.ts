@@ -25,6 +25,6 @@ export interface BaseTool {
 export type TransformerTool =
   | OneWayTransformerTool<any, any>
   | TwoWayTransformerTool<any, any>
-  | NWayTransformerTool<any>
+  | NWayTransformerTool<any, any>
 
 export type Tool = GeneratorTool<any> | TransformerTool

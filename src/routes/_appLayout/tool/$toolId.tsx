@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
+import type { NWayTransformerInstance } from '@/lib/tools/transformer'
 import { GeneratorConsole } from '@/components/tool/console/GeneratorConsole'
 import { TransformerConsole } from '@/components/tool/console/TransformerConsole'
 import { registry } from '@/lib/extensions/tools/register'
 import { createGeneratorInstance } from '@/lib/tools/generator'
 import { createTransformerInstance } from '@/lib/tools/transformer'
+import { NWayTransformerConsole } from '@/components/tool/console/NWayTransformerConsole'
 
 export const Route = createFileRoute('/_appLayout/tool/$toolId')({
   component: RouteComponent,
@@ -24,9 +26,18 @@ function RouteComponent() {
   if (tool.type === 'generator') {
     const instance = createGeneratorInstance(tool)
     return <GeneratorConsole tool={tool} instance={instance} />
-  } else if (tool.type === 'transformer') {
+  } else {
     const instance = createTransformerInstance(tool)
-    return <TransformerConsole tool={tool} instance={instance} />
+    if (tool.transformType === 'n-way') {
+      return (
+        <NWayTransformerConsole
+          tool={tool}
+          instance={instance as NWayTransformerInstance}
+        />
+      )
+    } else {
+      return <TransformerConsole tool={tool} instance={instance} />
+    }
   }
 
   return <div>Not support</div>

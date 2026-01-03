@@ -24,7 +24,8 @@ export function GeneratorConsole({ instance }: GeneratorConsoleProps) {
       const result = await instance.generate()
 
       setOutput(result)
-    } catch {
+    } catch (e) {
+      console.error(e)
       setError('An unexpected error occurred')
       setOutput('')
     } finally {

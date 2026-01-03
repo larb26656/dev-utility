@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Search } from 'lucide-react'
 
+import { useNavigate } from '@tanstack/react-router'
+import { Button } from './ui/button'
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,9 +12,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import { Button } from './ui/button'
 import { SEARCH_LIST } from '@/lib/extensions/tools/register'
-import { useNavigate } from '@tanstack/react-router'
 
 export function SearchButton() {
   const navigate = useNavigate()

@@ -9,7 +9,7 @@ export function createGeneratorInstance<T>(
       return String(value)
     },
     getOutputLabel: () => {
-      return tool.name ?? 'Output'
+      return tool.name
     },
   }
 }
