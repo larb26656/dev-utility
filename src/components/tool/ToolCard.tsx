@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, Star } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -7,10 +7,19 @@ type ToolCardProps = {
   title: string
   description: string
   icon?: ReactNode
+  isFavorite?: boolean
   onClick?: () => void
+  onFavoriteToggle?: () => void
 }
 
-export function ToolCard({ title, description, icon, onClick }: ToolCardProps) {
+export function ToolCard({
+  title,
+  description,
+  icon,
+  isFavorite,
+  onClick,
+  onFavoriteToggle,
+}: ToolCardProps) {
   return (
     <Card
       onClick={onClick}
@@ -25,20 +34,37 @@ export function ToolCard({ title, description, icon, onClick }: ToolCardProps) {
       {/* subtle gradient */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 to-transparent dark:from-white/3" />
 
-      {/* top-right action */}
-      {onClick ? (
-        <Button
-          size="icon"
-          variant="secondary"
-          className="absolute right-3 top-3 h-8 w-8 rounded-full bg-muted/50 hover:bg-muted/70"
-          onClick={(e) => {
-            e.stopPropagation() // ❗ไม่ให้ trigger card click ซ้ำ
-            onClick()
-          }}
-        >
-          <ExternalLink className="h-4 w-4" />
-        </Button>
-      ) : null}
+      {/* top-right actions */}
+      <div className="absolute right-3 top-3 flex gap-2">
+        {onFavoriteToggle && (
+          <Button
+            size="icon"
+            variant="secondary"
+            className={`h-8 w-8 rounded-full bg-muted/50 hover:bg-muted/70 ${
+              isFavorite ? 'text-yellow-500 fill-yellow-500' : ''
+            }`}
+            onClick={(e) => {
+              e.stopPropagation()
+              onFavoriteToggle()
+            }}
+          >
+            <Star className={`h-4 w-4 ${isFavorite ? 'fill-yellow-500' : ''}`} />
+          </Button>
+        )}
+        {onClick ? (
+          <Button
+            size="icon"
+            variant="secondary"
+            className="h-8 w-8 rounded-full bg-muted/50 hover:bg-muted/70"
+            onClick={(e) => {
+              e.stopPropagation()
+              onClick()
+            }}
+          >
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+        ) : null}
+      </div>
 
       <div className="flex gap-4 p-4">
         {/* icon */}

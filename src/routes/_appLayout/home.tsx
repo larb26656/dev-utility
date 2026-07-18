@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ToolCard } from '@/components/tool/ToolCard'
 import { Separator } from '@/components/ui/separator'
 import { registry } from '@/lib/extensions/tools/register'
+import { useFavoritesStore } from '@/stores/favoritesStore'
 
 export const Route = createFileRoute('/_appLayout/home')({
   component: RouteComponent,
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/_appLayout/home')({
 function RouteComponent() {
   const navigate = useNavigate()
   const toolGroups = registry.getGroups()
+  const { toggleFavorite, isFavorite } = useFavoritesStore()
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-primary rounded-lg p-6 text-primary-foreground">
@@ -33,10 +35,18 @@ function RouteComponent() {
                     key={tool.id}
                     title={tool.name}
                     description={tool.description || ''}
+                    isFavorite={isFavorite(tool.id)}
                     onClick={() =>
                       navigate({
                         to: '/tool/$toolId',
                         params: { toolId: tool.id },
+                      })
+                    }
+                    onFavoriteToggle={() =>
+                      toggleFavorite({
+                        id: tool.id,
+                        name: tool.name,
+                        category: tool.category,
                       })
                     }
                   />
