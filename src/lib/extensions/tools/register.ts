@@ -2,6 +2,7 @@ import {
   base64Tool,
   bcryptTool,
   dataFormatTool,
+  dockerCliToComposeTool,
   loremTool,
   md5Tool,
   regexTool,
@@ -20,6 +21,7 @@ registry.register(upperCaseTool)
 registry.register(loremTool)
 registry.register(uuidTool)
 registry.register(dataFormatTool)
+registry.register(dockerCliToComposeTool)
 registry.register(timestampTool)
 registry.register(regexTool)
 

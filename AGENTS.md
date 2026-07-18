@@ -32,6 +32,12 @@ Lefthook runs `npm run lint && npm run build` on `*.{js,ts,tsx}` files. Lint mus
 3. Import and `registry.register()` in `src/lib/extensions/tools/register.ts`
 4. If new category, add to `ToolCategory` type in `src/lib/tools/types.ts`
 
+### Testing
+
+- Place test files **co-located** next to the implementation: `<name>.test.ts` beside `<name>.ts`
+- Example: `docker-cli-to-compose.ts` and `docker-cli-to-compose.test.ts` in the same directory
+- Run tests: `npm run test`
+
 ### Build & Deploy
 
 - Build output: `dist/` (gitignored)

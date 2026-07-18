@@ -7,7 +7,7 @@ import {
   getLocalTimezoneOffset,
   getOffsetForDate,
   getTimezoneOffset,
-} from '../timestampUtils'
+} from './timestampUtils'
 
 describe('getTimezoneOffset', () => {
   it('returns empty string for local', () => {
