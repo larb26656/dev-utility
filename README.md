@@ -11,7 +11,7 @@ A powerful developer utility application that provides a collection of essential
 Click the star icon to pin frequently used tools to the sidebar.
 
 ### Quick Search ⌘K
-![Command Palette](docs/command-palette.png)
+![Command Palette](docs/quick-search.png)
 Search tools and snippets instantly with the command palette.
 
 ## Tech Stack
@@ -573,30 +573,6 @@ npm run check
 ## License
 
 This project is private and proprietary.
-
-## Suggested Features
-
-### Home Dashboard
-![Home Dashboard](docs/home-dashboard.png)
-Visual overview with categorized tools on a single page.
-
-### Favorites
-![Favorites](docs/favorites.png)
-Click the star icon to pin frequently used tools to the sidebar.
-
-### Recent
-![Recent](docs/recent.png)
-Access recently used tools from the command palette.
-
-### Quick Search ⌘K
-![Quick Search](docs/quick-search.png)
-Search tools and snippets instantly with keyword search.
-
-### New Tools
-- **JSON/YAML Formatter** - Prettify & minify data formats
-- **SQL Formatter** - Format and validate SQL queries
-- **Password Generator** - Configurable with strength indicator
-- **Text Diff** - Compare two texts and highlight differences
 
 ## Support
 
