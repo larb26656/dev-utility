@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/sidebar'
 import { Separator } from '@/components/ui/separator'
 import { AppBreadcrumb } from '@/components/AppBreadcrumb'
+import { RecentDropdown } from '@/components/RecentDropdown'
 import { SearchButton } from '@/components/SearchButton'
 
 export const Route = createFileRoute('/_appLayout')({
@@ -31,6 +32,7 @@ function HomePage() {
             />
             <AppBreadcrumb className="flex-1" />
             <SearchButton />
+            <RecentDropdown />
             <Separator
               orientation="vertical"
               className="data-[orientation=vertical]:h-4"

@@ -6,9 +6,11 @@ import {
   dataFormatTool,
   dockerCliToComposeTool,
   fileOpsTool,
+  httpStatusTool,
   jqTool,
   loremTool,
   md5Tool,
+  permissionTool,
   portTool,
   postgresqlTool,
   regexTool,
@@ -31,6 +33,7 @@ registry.register(uuidTool)
 registry.register(dataFormatTool)
 registry.register(dockerCliToComposeTool)
 registry.register(colorTool)
+registry.register(permissionTool)
 registry.register(timestampTool)
 registry.register(portTool)
 registry.register(regexTool)
@@ -40,6 +43,7 @@ registry.register(curlTool)
 registry.register(jqTool)
 registry.register(postgresqlTool)
 registry.register(systemTool)
+registry.register(httpStatusTool)
 
 const SEARCH_LIST = registry.getAll().map((tool) => ({
   id: tool.id,

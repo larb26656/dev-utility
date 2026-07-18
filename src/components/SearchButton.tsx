@@ -13,10 +13,12 @@ import {
   CommandSeparator,
 } from '@/components/ui/command'
 import { SEARCH_LIST } from '@/lib/extensions/tools/register'
+import { useRecentToolsStore } from '@/stores/recentToolsStore'
 
 export function SearchButton() {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false)
+  const { recentTools } = useRecentToolsStore()
 
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -55,6 +57,29 @@ export function SearchButton() {
         <CommandInput placeholder="Type a command or search tools..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+
+          {recentTools.length > 0 && (
+            <>
+              <CommandGroup heading="Recent">
+                {recentTools.map((tool) => (
+                  <CommandItem
+                    key={tool.id}
+                    value={`recent ${tool.name}`}
+                    onSelect={() =>
+                      runCommand(() =>
+                        navigate({
+                          to: `/tool/${tool.id}`,
+                        }),
+                      )
+                    }
+                  >
+                    <span>{tool.name}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              <CommandSeparator />
+            </>
+          )}
 
           <CommandGroup heading="Tools">
             {SEARCH_LIST.map((tool) => {

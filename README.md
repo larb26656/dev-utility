@@ -8,10 +8,12 @@ A powerful developer utility application that provides a collection of essential
 
 - **Generator Tools**: Generate various content like UUIDs, Lorem Ipsum text, and more
 - **Transformer Tools**: Convert and transform data between different formats
+- **Snippet Tools**: Searchable reference lists with copyable items and keyword search
 - **Categories**:
   - **Hash**: MD5, SHA256, Bcrypt
   - **Typo**: UUID, Lorem Ipsum, Upper Case
   - **Converter**: Base64 encoding/decoding
+  - **Snippet**: HTTP Status Codes, Regex Patterns, cURL commands, etc.
 - Modern React application with TypeScript
 - Built with TanStack Router for file-based routing
 - Styled with Tailwind CSS and Radix UI components
@@ -87,10 +89,12 @@ The application is built with a modular tool system that allows easy addition of
 - **Tool Types**:
   - `GeneratorTool`: Tools that generate content from scratch
   - `TransformerTool`: Tools that transform input data into different formats
+  - `SnippetTool`: Tools that provide searchable reference lists with copyable items
 
 - **Transformer Categories**:
   - `OneWayTransformerTool`: Single-direction transformation
   - `TwoWayTransformerTool`: Bidirectional transformation (e.g., encode/decode)
+  - `NWayTransformerTool`: Multi-format transformation (e.g., JSON ↔ YAML ↔ XML)
 
 - **Tool Registry**: Central registry for managing all available tools
 
@@ -107,9 +111,11 @@ src/
 │   │   └── tools/      # Tool implementations
 │   │       ├── converter/    # Converter tools (Base64)
 │   │       ├── hash/         # Hash tools (MD5, SHA256, Bcrypt)
+│   │       ├── snippet/      # Snippet tools (HTTP Status, Regex, etc.)
 │   │       └── typo/         # Text tools (UUID, Lorem, etc.)
 │   └── tools/          # Tool core architecture
 │       ├── generator/  # Generator tool framework
+│       ├── snippet/    # Snippet tool framework
 │       ├── transformer/ # Transformer tool framework
 │       └── registry/   # Tool registry
 └── routes/             # TanStack Router routes
@@ -461,6 +467,83 @@ interface BaseTool {
   category: ToolCategory // 'Hash' | 'Typo' | 'Converter'
 }
 ```
+
+### Creating a Snippet Tool
+
+Snippet tools provide searchable reference lists with copyable items. Each item has a `key`, `value`, optional `description`, and optional `keywords` for enhanced search.
+
+#### Step 1: Create the Snippet Tool
+
+```typescript
+// src/lib/extensions/tools/snippet/my-snippets.ts
+
+import { createSnippetTool } from '@/lib/tools/snippet'
+
+export const mySnippetsTool = createSnippetTool({
+  id: 'my-snippets',
+  name: 'My Snippets',
+  description: 'Useful snippets for daily work',
+  category: 'Snippet',
+  items: [
+    {
+      key: 'Example Snippet',
+      value: 'example value to copy',
+      description: 'What this snippet does',
+      keywords: ['search', 'keyword', 'related term'],
+    },
+    // more items...
+  ],
+})
+```
+
+#### Step 2: Export the Tool
+
+Add the export to the snippet index file:
+
+```typescript
+// src/lib/extensions/tools/snippet/index.ts
+
+export * from './existing-snippet'
+export * from './my-snippets' // Add this line
+```
+
+#### Step 3: Register the Tool
+
+Register the tool in the registry file:
+
+```typescript
+// src/lib/extensions/tools/register.ts
+
+import {
+  // ... existing imports
+  mySnippetsTool, // Add this import
+} from '.'
+
+// Register all tools
+// ... existing registrations
+registry.register(mySnippetsTool) // Add this line
+```
+
+#### Snippet Item Interface
+
+```typescript
+interface SnippetItem {
+  key: string           // Display name (e.g., '401 - Unauthorized')
+  value: string         // Value to copy (e.g., '401')
+  description?: string  // Optional explanation
+  keywords?: Array<string> // Optional search keywords for better discoverability
+}
+```
+
+#### Search Behavior
+
+The SnippetConsole component provides built-in search that filters by:
+- `key` - the display name
+- `value` - the copyable content
+- `description` - the explanation
+- `keywords` - any related search terms
+
+This means users can find items by searching for related terms even if they're not in the key or description directly.
 
 ### Best Practices
 

@@ -24,7 +24,8 @@ export function SnippetConsole({ instance }: SnippetConsoleProps) {
       (item) =>
         item.key.toLowerCase().includes(query) ||
         item.value.toLowerCase().includes(query) ||
-        item.description?.toLowerCase().includes(query),
+        item.description?.toLowerCase().includes(query) ||
+        item.keywords?.some((kw) => kw.toLowerCase().includes(query)),
     )
   }, [items, search])
 

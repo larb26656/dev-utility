@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
+import { useEffect } from 'react'
 import type { NWayTransformerInstance } from '@/lib/tools/transformer'
 import { GeneratorConsole } from '@/components/tool/console/GeneratorConsole'
 import { TransformerConsole } from '@/components/tool/console/TransformerConsole'
@@ -9,6 +10,7 @@ import { createGeneratorInstance } from '@/lib/tools/generator'
 import { createTransformerInstance } from '@/lib/tools/transformer'
 import { createSnippetInstance } from '@/lib/tools/snippet'
 import { NWayTransformerConsole } from '@/components/tool/console/NWayTransformerConsole'
+import { useRecentToolsStore } from '@/stores/recentToolsStore'
 
 const toolSearchSchema = z.object({
   inputFormat: z.string().optional(),
@@ -33,6 +35,11 @@ function RouteComponent() {
   const { tool } = Route.useLoaderData()
   const { toolId } = Route.useParams()
   const search = Route.useSearch()
+  const addRecentTool = useRecentToolsStore((s) => s.addRecentTool)
+
+  useEffect(() => {
+    addRecentTool({ id: tool.id, name: tool.name, category: tool.category })
+  }, [tool.id, tool.name, tool.category, addRecentTool])
 
   if (tool.type === 'freestyle') {
     const FreeStyleConsole = tool.component
