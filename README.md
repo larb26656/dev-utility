@@ -4,20 +4,23 @@
 
 A powerful developer utility application that provides a collection of essential tools for developers, including generators (UUID, Lorem Ipsum) and transformers (Base64, Hashing, Text manipulation).
 
-## Features
+## Suggested Features
 
-- **Generator Tools**: Generate various content like UUIDs, Lorem Ipsum text, and more
-- **Transformer Tools**: Convert and transform data between different formats
-- **Snippet Tools**: Searchable reference lists with copyable items and keyword search
-- **Categories**:
-  - **Hash**: MD5, SHA256, Bcrypt
-  - **Typo**: UUID, Lorem Ipsum, Upper Case
-  - **Converter**: Base64 encoding/decoding
-  - **Snippet**: HTTP Status Codes, Regex Patterns, cURL commands, etc.
-- Modern React application with TypeScript
-- Built with TanStack Router for file-based routing
-- Styled with Tailwind CSS and Radix UI components
-- Responsive design with dark mode support
+### Home Dashboard
+![Home Dashboard](docs/home-dashboard.png)
+Visual overview with categorized tools on a single page.
+
+### Favorites
+![Favorites](docs/favorites.png)
+Click the star icon to pin frequently used tools to the sidebar.
+
+### Recent
+![Recent](docs/recent.png)
+Automatically tracks and displays your recently used tools.
+
+### Quick Search ⌘K
+![Command Palette](docs/command-palette.png)
+Search tools and snippets instantly with the command palette.
 
 ## Tech Stack
 
@@ -578,6 +581,30 @@ npm run check
 ## License
 
 This project is private and proprietary.
+
+## Suggested Features
+
+### Home Dashboard
+![Home Dashboard](docs/home-dashboard.png)
+Visual overview with categorized tools on a single page.
+
+### Favorites
+![Favorites](docs/favorites.png)
+Click the star icon to pin frequently used tools to the sidebar.
+
+### Recent
+![Recent](docs/recent.png)
+Access recently used tools from the command palette.
+
+### Quick Search ⌘K
+![Quick Search](docs/quick-search.png)
+Search tools and snippets instantly with keyword search.
+
+### New Tools
+- **JSON/YAML Formatter** - Prettify & minify data formats
+- **SQL Formatter** - Format and validate SQL queries
+- **Password Generator** - Configurable with strength indicator
+- **Text Diff** - Compare two texts and highlight differences
 
 ## Support
 
