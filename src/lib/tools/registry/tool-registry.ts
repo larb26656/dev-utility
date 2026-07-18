@@ -1,15 +1,22 @@
+import Fuse from 'fuse.js'
+
+import { buildSearchIndex } from '../search/index-builder'
 import type { Tool } from '../types'
 import type { Registry, ToolFilter, ToolGroup } from './types'
+import type { SearchResultItem } from '../search/types'
 
 export class ToolRegistryImpl implements Registry {
   private tools: Map<string, Tool> = new Map()
+  private fuse: Fuse<SearchResultItem> | null = null
 
   register(tool: Tool): void {
     this.tools.set(tool.id, tool)
+    this.fuse = null
   }
 
   unregister(id: string): void {
     this.tools.delete(id)
+    this.fuse = null
   }
 
   get(id: string): Tool | undefined {
@@ -24,29 +31,47 @@ export class ToolRegistryImpl implements Registry {
     return this.getAll().filter((c) => c.category === category)
   }
 
-  // search(filter: ConversionFilter): Conversion[] {
-  //   let results = this.getAll()
+  search(filter: ToolFilter): Array<Tool> {
+    const results = this.getAll()
 
-  //   if (filter.category) {
-  //     results = results.filter((c) => c.category === filter.category)
-  //   }
+    let filtered = results
 
-  //   if (filter.query) {
-  //     const query = filter.query.toLowerCase()
-  //     results = results.filter(
-  //       (c) =>
-  //         c.name.toLowerCase().includes(query) ||
-  //         c.description.toLowerCase().includes(query) ||
-  //         c.inputFormat.toLowerCase().includes(query) ||
-  //         c.outputFormat.toLowerCase().includes(query),
-  //     )
-  //   }
+    if (filter.category) {
+      filtered = filtered.filter((c) => c.category === filter.category)
+    }
 
-  //   return results
-  // }
+    if (filter.query) {
+      const query = filter.query.toLowerCase()
+      filtered = filtered.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query) ||
+          c.description?.toLowerCase().includes(query),
+      )
+    }
 
-  search(_: ToolFilter): Array<Tool> {
-    throw new Error('Method not implemented.')
+    return filtered
+  }
+
+  fuzzySearch(query: string): Array<SearchResultItem> {
+    if (!this.fuse) {
+      const index = buildSearchIndex(this.getAll())
+      this.fuse = new Fuse(index, {
+        keys: [
+          { name: 'name', weight: 0.4 },
+          { name: 'description', weight: 0.3 },
+          { name: 'category', weight: 0.2 },
+          { name: 'key', weight: 0.4 },
+          { name: 'value', weight: 0.3 },
+          { name: 'toolName', weight: 0.2 },
+          { name: 'keywords', weight: 0.25 },
+        ],
+        threshold: 0.4,
+        includeScore: true,
+      })
+    }
+
+    const results = this.fuse.search(query)
+    return results.map((r) => r.item)
   }
 
   getGroups(): Array<ToolGroup> {

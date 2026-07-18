@@ -1,9 +1,8 @@
-import { ChevronDown, ChevronRight, HomeIcon, Settings, Star } from 'lucide-react'
+import { ChevronDown, ChevronRight, HomeIcon, Star } from 'lucide-react'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenuButton,
@@ -122,16 +121,6 @@ export function AppSidebar() {
           })}
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <a href="#">
-              <Settings />
-              <span>Setting</span>
-            </a>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarFooter>
     </Sidebar>
   )
 }

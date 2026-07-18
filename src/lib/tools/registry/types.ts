@@ -1,4 +1,5 @@
 import type { Tool } from '../types'
+import type { SearchResultItem } from '../search/types'
 
 export interface ToolRegistry {
   [key: string]: Tool
@@ -21,5 +22,6 @@ export interface Registry {
   getAll: () => Array<Tool>
   getByCategory: (category: string) => Array<Tool>
   search: (filter: ToolFilter) => Array<Tool>
+  fuzzySearch: (query: string) => Array<SearchResultItem>
   getGroups: () => Array<ToolGroup>
 }

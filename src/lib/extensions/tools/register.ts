@@ -15,10 +15,12 @@ import {
   postgresqlTool,
   regexTool,
   sha256Tool,
+  stringEscapeTool,
   systemTool,
   textProcessTool,
   timestampTool,
   upperCaseTool,
+  urlEscapeTool,
   uuidTool,
 } from '.'
 import { registry } from '@/lib/tools/registry'
@@ -41,15 +43,10 @@ registry.register(textProcessTool)
 registry.register(fileOpsTool)
 registry.register(curlTool)
 registry.register(jqTool)
-registry.register(postgresqlTool)
+registry.register(stringEscapeTool)
 registry.register(systemTool)
 registry.register(httpStatusTool)
+registry.register(urlEscapeTool)
+registry.register(postgresqlTool)
 
-const SEARCH_LIST = registry.getAll().map((tool) => ({
-  id: tool.id,
-  name: tool.name,
-  category: tool.category,
-  href: `/tool/${tool.id}`,
-}))
-
-export { registry, SEARCH_LIST }
+export { registry }
