@@ -1,14 +1,20 @@
 import {
   base64Tool,
   bcryptTool,
+  colorTool,
+  curlTool,
   dataFormatTool,
   dockerCliToComposeTool,
+  fileOpsTool,
+  jqTool,
   loremTool,
   md5Tool,
   portTool,
+  postgresqlTool,
   regexTool,
   sha256Tool,
-  shellTool,
+  systemTool,
+  textProcessTool,
   timestampTool,
   upperCaseTool,
   uuidTool,
@@ -24,10 +30,16 @@ registry.register(loremTool)
 registry.register(uuidTool)
 registry.register(dataFormatTool)
 registry.register(dockerCliToComposeTool)
+registry.register(colorTool)
 registry.register(timestampTool)
 registry.register(portTool)
 registry.register(regexTool)
-registry.register(shellTool)
+registry.register(textProcessTool)
+registry.register(fileOpsTool)
+registry.register(curlTool)
+registry.register(jqTool)
+registry.register(postgresqlTool)
+registry.register(systemTool)
 
 const SEARCH_LIST = registry.getAll().map((tool) => ({
   id: tool.id,
