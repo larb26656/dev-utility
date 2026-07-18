@@ -6,17 +6,9 @@ A powerful developer utility application that provides a collection of essential
 
 ## Suggested Features
 
-### Home Dashboard
-![Home Dashboard](docs/home-dashboard.png)
-Visual overview with categorized tools on a single page.
-
 ### Favorites
 ![Favorites](docs/favorites.png)
 Click the star icon to pin frequently used tools to the sidebar.
-
-### Recent
-![Recent](docs/recent.png)
-Automatically tracks and displays your recently used tools.
 
 ### Quick Search ⌘K
 ![Command Palette](docs/command-palette.png)
