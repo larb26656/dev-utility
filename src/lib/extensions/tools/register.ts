@@ -7,6 +7,7 @@ import {
   md5Tool,
   regexTool,
   sha256Tool,
+  shellTool,
   timestampTool,
   upperCaseTool,
   uuidTool,
@@ -24,6 +25,7 @@ registry.register(dataFormatTool)
 registry.register(dockerCliToComposeTool)
 registry.register(timestampTool)
 registry.register(regexTool)
+registry.register(shellTool)
 
 const SEARCH_LIST = registry.getAll().map((tool) => ({
   id: tool.id,
