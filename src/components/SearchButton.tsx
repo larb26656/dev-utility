@@ -3,6 +3,7 @@ import { FileText, Search, Wrench } from 'lucide-react'
 
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
+import { useEffect } from 'react'
 import { Button } from './ui/button'
 import type { SearchResultItem, SnippetSearchItem, ToolSearchItem } from '@/lib/tools/search/types'
 import {
@@ -24,7 +25,7 @@ export function SearchButton() {
   const [results, setResults] = React.useState<Array<SearchResultItem>>([])
   const { recentTools } = useRecentToolsStore()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
@@ -36,7 +37,7 @@ export function SearchButton() {
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (query.trim()) {
       const searchResults = registry.fuzzySearch(query)
       setResults(searchResults)

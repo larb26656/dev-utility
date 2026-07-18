@@ -1,13 +1,16 @@
 import {
   base64Tool,
   bcryptTool,
+  caseConverterTool,
   colorTool,
+  cronTool,
   curlTool,
   dataFormatTool,
   dockerCliToComposeTool,
   fileOpsTool,
   httpStatusTool,
   jqTool,
+  jwtDecoderTool,
   loremTool,
   md5Tool,
   permissionTool,
@@ -34,7 +37,10 @@ registry.register(loremTool)
 registry.register(uuidTool)
 registry.register(dataFormatTool)
 registry.register(dockerCliToComposeTool)
+registry.register(caseConverterTool)
+registry.register(jwtDecoderTool)
 registry.register(colorTool)
+registry.register(cronTool)
 registry.register(permissionTool)
 registry.register(timestampTool)
 registry.register(portTool)
