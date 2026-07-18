@@ -5,6 +5,7 @@ import {
   dockerCliToComposeTool,
   loremTool,
   md5Tool,
+  portTool,
   regexTool,
   sha256Tool,
   shellTool,
@@ -24,6 +25,7 @@ registry.register(uuidTool)
 registry.register(dataFormatTool)
 registry.register(dockerCliToComposeTool)
 registry.register(timestampTool)
+registry.register(portTool)
 registry.register(regexTool)
 registry.register(shellTool)
 
