@@ -367,6 +367,101 @@ interface TwoWayTransformerTool<TA, TB> {
 }
 ```
 
+### Creating a FreeStyle Tool
+
+FreeStyle tools are fully custom tools where you have complete control over the UI and logic. They're ideal for tools that don't fit the generator/transformer pattern, like the Timestamp converter.
+
+#### Step 1: Create the Tool
+
+```typescript
+// src/lib/extensions/tools/converter/my-tool.ts
+
+import { createFreeStyleTool } from '@/lib/tools/freestyle'
+import { MyToolComponent } from '@/components/tool/console/MyToolComponent'
+
+export const myTool = createFreeStyleTool({
+  id: 'my-tool',
+  name: 'My Tool',
+  description: 'Description of what this tool does',
+  category: 'Converter',
+  component: MyToolComponent,
+})
+```
+
+#### Step 2: Create the Component
+
+The component receives the tool definition and has full control over the UI:
+
+```tsx
+// src/components/tool/console/MyToolComponent.tsx
+
+import type { FreeStyleTool } from '@/lib/tools/freestyle'
+
+interface MyToolComponentProps {
+  tool: FreeStyleTool
+}
+
+export function MyToolComponent({ tool }: MyToolComponentProps) {
+  return (
+    <div>
+      <h1>{tool.name}</h1>
+      {/* Your custom UI here */}
+    </div>
+  )
+}
+```
+
+#### Step 3: Export the Tool
+
+Add the export to the category's index file:
+
+```typescript
+// src/lib/extensions/tools/converter/index.ts
+
+export * from './base64'
+export * from './data-format'
+export * from './timestamp'
+export * from './my-tool' // Add this line
+```
+
+#### Step 4: Register the Tool
+
+Register the tool in the registry file:
+
+```typescript
+// src/lib/extensions/tools/register.ts
+
+import {
+  // ... existing imports
+  myTool, // Add this import
+} from '.'
+
+// Register all tools
+registry.register(base64Tool)
+// ... existing registrations
+registry.register(myTool) // Add this line
+```
+
+#### FreeStyle Tool Interface
+
+```typescript
+interface FreeStyleTool extends BaseTool {
+  type: 'freestyle'
+  component: React.ComponentType<{ tool: FreeStyleTool }>
+}
+```
+
+The `BaseTool` interface provides:
+
+```typescript
+interface BaseTool {
+  id: string      // Unique identifier (e.g., 'timestamp')
+  name: string    // Display name (e.g., 'Timestamp')
+  description?: string  // Optional description
+  category: ToolCategory // 'Hash' | 'Typo' | 'Converter'
+}
+```
+
 ### Best Practices
 
 1. **Tool IDs**: Use kebab-case for unique identifiers (e.g., 'base64', 'url-encode')

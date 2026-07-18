@@ -32,25 +32,28 @@ function RouteComponent() {
   const { toolId } = Route.useParams()
   const search = Route.useSearch()
 
+  if (tool.type === 'freestyle') {
+    const FreeStyleConsole = tool.component
+    return <FreeStyleConsole key={toolId} tool={tool} />
+  }
+
   if (tool.type === 'generator') {
     const instance = createGeneratorInstance(tool)
     return <GeneratorConsole key={toolId} tool={tool} instance={instance} />
-  } else {
-    const instance = createTransformerInstance(tool)
-    if (tool.transformType === 'n-way') {
-      return (
-        <NWayTransformerConsole
-          key={toolId}
-          tool={tool}
-          instance={instance as NWayTransformerInstance}
-          defaultInputFormat={search.inputFormat}
-          defaultOutputFormat={search.outputFormat}
-        />
-      )
-    } else {
-      return <TransformerConsole key={toolId} tool={tool} instance={instance} />
-    }
   }
 
-  return <div>Not support</div>
+  const instance = createTransformerInstance(tool)
+  if (tool.transformType === 'n-way') {
+    return (
+      <NWayTransformerConsole
+        key={toolId}
+        tool={tool}
+        instance={instance as NWayTransformerInstance}
+        defaultInputFormat={search.inputFormat}
+        defaultOutputFormat={search.outputFormat}
+      />
+    )
+  }
+
+  return <TransformerConsole key={toolId} tool={tool} instance={instance} />
 }

@@ -4,6 +4,7 @@ import type {
   OneWayTransformerTool,
   TwoWayTransformerTool,
 } from './transformer'
+import type { FreeStyleTool } from './freestyle'
 
 export type ToolCategory = 'Hash' | 'Typo' | 'Converter'
 
@@ -19,4 +20,4 @@ export type TransformerTool =
   | TwoWayTransformerTool<any, any>
   | NWayTransformerTool<any, any>
 
-export type Tool = GeneratorTool<any> | TransformerTool
+export type Tool = GeneratorTool<any> | TransformerTool | FreeStyleTool
