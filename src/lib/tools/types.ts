@@ -5,8 +5,9 @@ import type {
   TwoWayTransformerTool,
 } from './transformer'
 import type { FreeStyleTool } from './freestyle'
+import type { SnippetTool } from './snippet'
 
-export type ToolCategory = 'Hash' | 'Typo' | 'Converter'
+export type ToolCategory = 'Hash' | 'Typo' | 'Converter' | 'Snippet'
 
 export interface BaseTool {
   id: string
@@ -20,4 +21,4 @@ export type TransformerTool =
   | TwoWayTransformerTool<any, any>
   | NWayTransformerTool<any, any>
 
-export type Tool = GeneratorTool<any> | TransformerTool | FreeStyleTool
+export type Tool = GeneratorTool<any> | TransformerTool | FreeStyleTool | SnippetTool

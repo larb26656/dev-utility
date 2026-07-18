@@ -4,6 +4,7 @@ import {
   dataFormatTool,
   loremTool,
   md5Tool,
+  regexTool,
   sha256Tool,
   timestampTool,
   upperCaseTool,
@@ -20,6 +21,7 @@ registry.register(loremTool)
 registry.register(uuidTool)
 registry.register(dataFormatTool)
 registry.register(timestampTool)
+registry.register(regexTool)
 
 const SEARCH_LIST = registry.getAll().map((tool) => ({
   id: tool.id,

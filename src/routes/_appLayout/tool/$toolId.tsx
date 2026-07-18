@@ -3,9 +3,11 @@ import { z } from 'zod'
 import type { NWayTransformerInstance } from '@/lib/tools/transformer'
 import { GeneratorConsole } from '@/components/tool/console/GeneratorConsole'
 import { TransformerConsole } from '@/components/tool/console/TransformerConsole'
+import { SnippetConsole } from '@/components/tool/console/SnippetConsole'
 import { registry } from '@/lib/extensions/tools/register'
 import { createGeneratorInstance } from '@/lib/tools/generator'
 import { createTransformerInstance } from '@/lib/tools/transformer'
+import { createSnippetInstance } from '@/lib/tools/snippet'
 import { NWayTransformerConsole } from '@/components/tool/console/NWayTransformerConsole'
 
 const toolSearchSchema = z.object({
@@ -35,11 +37,12 @@ function RouteComponent() {
   if (tool.type === 'freestyle') {
     const FreeStyleConsole = tool.component
     return <FreeStyleConsole key={toolId} tool={tool} />
-  }
-
-  if (tool.type === 'generator') {
+  } else if (tool.type === 'generator') {
     const instance = createGeneratorInstance(tool)
     return <GeneratorConsole key={toolId} tool={tool} instance={instance} />
+  } else if (tool.type === 'snippet') {
+    const instance = createSnippetInstance(tool)
+    return <SnippetConsole key={toolId} tool={tool} instance={instance} />
   }
 
   const instance = createTransformerInstance(tool)
