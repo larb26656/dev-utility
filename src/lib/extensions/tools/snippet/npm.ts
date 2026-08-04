@@ -1,0 +1,30 @@
+import { createSnippetTool } from '@/lib/tools/snippet'
+
+export const npmTool = createSnippetTool({
+  id: 'npm',
+  name: 'npm / pnpm / yarn Snippets',
+  description: 'Equivalent commands across npm, pnpm, and yarn for package management',
+  category: 'Snippet',
+  items: [
+    { key: 'npm/pnpm/yarn - install all', value: 'npm install | pnpm install | yarn', description: 'Install all dependencies from lockfile' },
+    { key: 'npm/pnpm/yarn - add package', value: 'npm i pkg | pnpm add pkg | yarn add pkg', description: 'Add a runtime dependency' },
+    { key: 'npm/pnpm/yarn - add dev dep', value: 'npm i -D pkg | pnpm add -D pkg | yarn add -D pkg', description: 'Add a devDependency' },
+    { key: 'npm/pnpm/yarn - add global', value: 'npm i -g pkg | pnpm add -g pkg | yarn global add pkg', description: 'Install a package globally' },
+    { key: 'npm/pnpm/yarn - remove', value: 'npm rm pkg | pnpm rm pkg | yarn remove pkg', description: 'Remove a dependency' },
+    { key: 'npm/pnpm/yarn - update', value: 'npm update | pnpm update | yarn upgrade', description: 'Update dependencies to latest allowed by range' },
+    { key: 'npm/pnpm/yarn - outdated', value: 'npm outdated | pnpm outdated | yarn outdated', description: 'List dependencies with newer versions available' },
+    { key: 'npm/pnpm/yarn - audit', value: 'npm audit | pnpm audit | yarn audit', description: 'Check for known vulnerabilities' },
+    { key: 'npm/pnpm/yarn - audit fix', value: 'npm audit fix | pnpm audit --fix | yarn audit', description: 'Auto-fix vulnerabilities (yarn audit is read-only)' },
+    { key: 'npm/pnpm/yarn - run script', value: 'npm run dev | pnpm dev | yarn dev', description: 'Run a script defined in package.json' },
+    { key: 'npm/pnpm/yarn - list deps', value: 'npm ls | pnpm ls | yarn list', description: 'List installed dependencies' },
+    { key: 'npm/pnpm/yarn - clean cache', value: 'npm cache clean --force | pnpm store prune | yarn cache clean', description: 'Clear the local package cache/store' },
+    { key: 'npm/pnpm/yarn - exec bin', value: 'npx cmd | pnpm dlx cmd | yarn dlx cmd', description: 'Run a one-off binary without installing' },
+    { key: 'npm/pnpm/yarn - init', value: 'npm init | pnpm init | yarn init', description: 'Create a new package.json' },
+    { key: 'npm/pnpm/yarn - init defaults', value: 'npm init -y | pnpm init | yarn init -y', description: 'Create package.json using defaults' },
+    { key: 'npm/pnpm/yarn - publish', value: 'npm publish | pnpm publish | yarn publish', description: 'Publish the package to the registry' },
+    { key: 'npm/pnpm/yarn - version bump', value: 'npm version patch | pnpm version patch | yarn version', description: 'Bump the patch version and tag' },
+    { key: 'npm/pnpm/yarn - whoami', value: 'npm whoami | pnpm whoami | yarn whoami', description: 'Show the currently logged-in registry user' },
+    { key: 'npm/pnpm/yarn - reinstall clean', value: 'rm -rf node_modules <lockfile> && npm install', description: 'Wipe node_modules + lockfile and reinstall (npm)' },
+    { key: 'npm - overrides (alias)', value: 'npm install --save-alias <new>@npm:<orig>', description: 'Alias one package name to another (npm 8.3+)' },
+  ],
+})

@@ -1,4 +1,5 @@
 import {
+  asciiTableTool,
   base64Tool,
   bcryptTool,
   caseConverterTool,
@@ -7,18 +8,25 @@ import {
   curlTool,
   dataFormatTool,
   dockerCliToComposeTool,
+  dockerTool,
   fileOpsTool,
+  gitTool,
+  htmlEntitiesTool,
   httpStatusTool,
   jqTool,
   jwtDecoderTool,
+  kubectlTool,
   loremTool,
   md5Tool,
   mermaidTool,
+  mimeTypesTool,
+  npmTool,
   permissionTool,
   portTool,
   postgresqlTool,
   regexTool,
   sha256Tool,
+  sshTool,
   stringEscapeTool,
   systemTool,
   textProcessTool,
@@ -56,5 +64,13 @@ registry.register(systemTool)
 registry.register(httpStatusTool)
 registry.register(urlEscapeTool)
 registry.register(postgresqlTool)
+registry.register(gitTool)
+registry.register(dockerTool)
+registry.register(npmTool)
+registry.register(kubectlTool)
+registry.register(sshTool)
+registry.register(mimeTypesTool)
+registry.register(htmlEntitiesTool)
+registry.register(asciiTableTool)
 
 export { registry }
