@@ -64,6 +64,21 @@ describe('getOffsetForDate', () => {
     const date = new Date('2024-07-18T10:00:00Z')
     expect(getOffsetForDate(date, 'Asia/Bangkok')).toBe('+07:00')
   })
+
+  it('returns DST offset for America/New_York in July', () => {
+    const date = new Date('2024-07-18T10:30:00.000Z')
+    expect(getOffsetForDate(date, 'America/New_York')).toBe('-04:00')
+  })
+
+  it('returns DST offset for Europe/London in July', () => {
+    const date = new Date('2024-07-18T10:30:00.000Z')
+    expect(getOffsetForDate(date, 'Europe/London')).toBe('+01:00')
+  })
+
+  it('returns non-DST offset for America/New_York in January', () => {
+    const date = new Date('2024-01-18T10:30:00.000Z')
+    expect(getOffsetForDate(date, 'America/New_York')).toBe('-05:00')
+  })
 })
 
 describe('formatTimestamp', () => {
@@ -127,6 +142,18 @@ describe('formatISOWithOffset', () => {
     const date = new Date('2024-01-18T10:30:00.000Z')
     const result = formatISOWithOffset(date, 'America/New_York')
     expect(result).toBe('2024-01-18T05:30:00.000-05:00')
+  })
+
+  it('formats date with -04:00 offset for New York in July (DST)', () => {
+    const date = new Date('2024-07-18T10:30:00.000Z')
+    const result = formatISOWithOffset(date, 'America/New_York')
+    expect(result).toBe('2024-07-18T06:30:00.000-04:00')
+  })
+
+  it('formats date with +01:00 offset for London in July (BST)', () => {
+    const date = new Date('2024-07-18T10:30:00.000Z')
+    const result = formatISOWithOffset(date, 'Europe/London')
+    expect(result).toBe('2024-07-18T11:30:00.000+01:00')
   })
 
   it('includes milliseconds in output', () => {

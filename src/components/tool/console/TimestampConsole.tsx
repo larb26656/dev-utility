@@ -193,7 +193,7 @@ export function TimestampConsole({ tool }: TimestampConsoleProps) {
               <SelectItem key={tz.id} value={tz.id}>
                 {tz.id === 'local'
                   ? tz.label
-                  : `${tz.label} (${tz.offset})`}
+                  : `${tz.label} (${getOffsetForDate(new Date(), tz.id)})`}
               </SelectItem>
             ))}
           </SelectContent>

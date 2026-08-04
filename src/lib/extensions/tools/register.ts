@@ -13,6 +13,7 @@ import {
   jwtDecoderTool,
   loremTool,
   md5Tool,
+  mermaidTool,
   permissionTool,
   portTool,
   postgresqlTool,
@@ -44,6 +45,7 @@ registry.register(cronTool)
 registry.register(permissionTool)
 registry.register(timestampTool)
 registry.register(portTool)
+registry.register(mermaidTool)
 registry.register(regexTool)
 registry.register(textProcessTool)
 registry.register(fileOpsTool)

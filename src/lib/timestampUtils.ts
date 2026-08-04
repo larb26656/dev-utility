@@ -54,31 +54,56 @@ export function getTimezoneOffset(tzId: TimezoneId): string {
   return ''
 }
 
-export function getLocalTimezoneOffset(date: Date): string {
-  const parts = new Intl.DateTimeFormat('en', {
-    timeZoneName: 'shortOffset',
-  })
-    .formatToParts(date)
-    .find((p) => p.type === 'timeZoneName')
-  const raw = parts?.value.replace('GMT', '') ?? '+00:00'
-
-  // Normalize: "+7" -> "+07:00", "+7:00" -> "+07:00", etc.
-  const match = raw.match(/^([+-])(\d{1,2}):?(\d{2})?$/)
+function normalizeOffset(raw: string): string {
+  const cleaned = raw.replace('GMT', '').trim()
+  if (cleaned === '' || cleaned === '0' || cleaned === '+0' || cleaned === '-0') {
+    return '+00:00'
+  }
+  const match = cleaned.match(/^([+-])(\d{1,2}):?(\d{2})?$/)
   if (match) {
     const sign = match[1]
     const hours = match[2].padStart(2, '0')
     const mins = match[3] ? match[3].padStart(2, '0') : '00'
     return `${sign}${hours}:${mins}`
   }
+  return cleaned.startsWith('+') || cleaned.startsWith('-') ? cleaned : `+${cleaned}`
+}
 
-  return '+00:00'
+export function getLocalTimezoneOffset(date: Date): string {
+  const part = new Intl.DateTimeFormat('en', {
+    timeZoneName: 'shortOffset',
+  })
+    .formatToParts(date)
+    .find((p) => p.type === 'timeZoneName')
+  return normalizeOffset(part?.value ?? '+00:00')
+}
+
+function getNamedTimezoneOffset(date: Date, tz: string): string {
+  try {
+    const part = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz,
+      timeZoneName: 'shortOffset',
+    })
+      .formatToParts(date)
+      .find((p) => p.type === 'timeZoneName')
+    if (part) {
+      return normalizeOffset(part.value)
+    }
+  } catch {
+    // ignore
+  }
+  const found = TIMEZONES.find((t) => t.id === tz)
+  return found?.offset ?? ''
 }
 
 export function getOffsetForDate(date: Date, tz: TimezoneId): string {
   if (tz === 'local') {
     return getLocalTimezoneOffset(date)
   }
-  return getTimezoneOffset(tz)
+  if (tz === 'UTC') {
+    return '+00:00'
+  }
+  return getNamedTimezoneOffset(date, tz)
 }
 
 export function formatDate(date: Date, tz: TimezoneId): string {
@@ -113,15 +138,21 @@ export function formatISOWithOffset(date: Date, tz: TimezoneId): string {
 
   let year: number, month: number, day: number, hours: number, minutes: number, seconds: number
 
-  if (tz === 'local' || tz === 'UTC') {
+  if (tz === 'UTC') {
     year = date.getUTCFullYear()
     month = date.getUTCMonth() + 1
     day = date.getUTCDate()
     hours = date.getUTCHours()
     minutes = date.getUTCMinutes()
     seconds = date.getUTCSeconds()
+  } else if (tz === 'local') {
+    year = date.getFullYear()
+    month = date.getMonth() + 1
+    day = date.getDate()
+    hours = date.getHours()
+    minutes = date.getMinutes()
+    seconds = date.getSeconds()
   } else {
-    // For named timezones, we need to format in that timezone
     const options: Intl.DateTimeFormatOptions = {
       timeZone: tz,
       year: 'numeric',
@@ -148,7 +179,7 @@ export function formatISOWithOffset(date: Date, tz: TimezoneId): string {
 
   const isoBase = `${year}-${pad(month)}-${pad(day)}T${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${ms}`
 
-  if (offset === '+00:00' || offset === '+00' || offset === '+7:00') {
+  if (offset === '+00:00' || offset === '-00:00' || offset === '+00') {
     return isoBase + 'Z'
   }
   return isoBase + offset
