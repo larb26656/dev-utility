@@ -29,6 +29,7 @@ import {
   sshTool,
   stringEscapeTool,
   systemTool,
+  tailwindTool,
   textProcessTool,
   timestampTool,
   upperCaseTool,
@@ -72,5 +73,6 @@ registry.register(sshTool)
 registry.register(mimeTypesTool)
 registry.register(htmlEntitiesTool)
 registry.register(asciiTableTool)
+registry.register(tailwindTool)
 
 export { registry }
