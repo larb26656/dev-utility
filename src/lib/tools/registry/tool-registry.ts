@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js'
 
 import { buildSearchIndex } from '../search/index-builder'
+import { CATEGORY_ORDER } from '../types'
 import type { Tool } from '../types'
 import type { Registry, ToolFilter, ToolGroup } from './types'
 import type { SearchResultItem } from '../search/types'
@@ -83,10 +84,29 @@ export class ToolRegistryImpl implements Registry {
       categoryMap.set(conversion.category, group)
     })
 
-    return Array.from(categoryMap.entries()).map(([category, tools]) => ({
+    const toGroup = ([category, tools]: [string, Array<Tool>]): ToolGroup => ({
       category,
-      tools,
-    }))
+      tools: [...tools].sort((a, b) => a.name.localeCompare(b.name)),
+    })
+
+    const ordered: Array<ToolGroup> = []
+    const seen = new Set<string>()
+
+    for (const category of CATEGORY_ORDER) {
+      const tools = categoryMap.get(category)
+      if (tools) {
+        ordered.push(toGroup([category, tools]))
+        seen.add(category)
+      }
+    }
+
+    for (const [category, tools] of categoryMap) {
+      if (!seen.has(category)) {
+        ordered.push(toGroup([category, tools]))
+      }
+    }
+
+    return ordered
   }
 }
 

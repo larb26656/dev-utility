@@ -3,6 +3,7 @@ import {
   base64Tool,
   bcryptTool,
   caseConverterTool,
+  cidrTool,
   colorTool,
   cronTool,
   curlTool,
@@ -74,5 +75,6 @@ registry.register(mimeTypesTool)
 registry.register(htmlEntitiesTool)
 registry.register(asciiTableTool)
 registry.register(tailwindTool)
+registry.register(cidrTool)
 
 export { registry }

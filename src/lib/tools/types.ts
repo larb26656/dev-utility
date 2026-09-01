@@ -7,7 +7,15 @@ import type {
 import type { FreeStyleTool } from './freestyle'
 import type { SnippetTool } from './snippet'
 
-export type ToolCategory = 'Hash' | 'Typo' | 'Converter' | 'Snippet'
+export type ToolCategory = 'Hash' | 'Typo' | 'Converter' | 'Snippet' | 'Network'
+
+export const CATEGORY_ORDER = [
+  'Hash',
+  'Typo',
+  'Network',
+  'Converter',
+  'Snippet',
+] as const satisfies ReadonlyArray<ToolCategory>
 
 export interface BaseTool {
   id: string
