@@ -27,6 +27,7 @@ import {
   portTool,
   postgresqlTool,
   regexTool,
+  satirTool,
   sha256Tool,
   sshTool,
   stringEscapeTool,
@@ -78,5 +79,6 @@ registry.register(asciiTableTool)
 registry.register(tailwindTool)
 registry.register(cidrTool)
 registry.register(eisenhowerTool)
+  registry.register(satirTool)
 
 export { registry }
