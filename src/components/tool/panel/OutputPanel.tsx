@@ -58,7 +58,7 @@ export function OutputPanel({
         <Textarea
           value={error || value}
           readOnly
-          className={`flex-1 h-[300px] field-sizing-fixed font-mono text-sm resize-none ${
+          className={`h-[300px] field-sizing-fixed font-mono text-sm resize-none ${
             error ? 'text-destructive' : ''
           }`}
           placeholder="Output will appear here..."
