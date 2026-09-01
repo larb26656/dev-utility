@@ -11,8 +11,10 @@ import {
   Download,
   FileCode,
   Image as ImageIcon,
+  Link2,
   RotateCcw,
   Trash2,
+  Upload,
   ZoomIn,
   ZoomOut,
 } from 'lucide-react'
@@ -20,10 +22,25 @@ import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch'
 import type { FreeStyleTool } from '@/lib/tools/freestyle'
 import { Button } from '@/components/ui/button'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  buildMermaidInkUrl,
+  buildMermaidLiveUrl,
+  encodeState,
+  extractCode,
+} from '@/lib/mermaid-pako'
 import { cn } from '@/lib/utils'
 
 interface MermaidConsoleProps {
@@ -136,6 +153,8 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
   const [code, setCode] = useState('')
   const [svg, setSvg] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [importOpen, setImportOpen] = useState(false)
+  const [importInput, setImportInput] = useState('')
   const renderTokenRef = useRef(0)
 
   useEffect(() => {
@@ -216,11 +235,63 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
     }
   }, [svg])
 
+  const handleCopyPakoLive = useCallback(async () => {
+    if (!code) return
+    try {
+      const fragment = encodeState({ code })
+      const url = buildMermaidLiveUrl(fragment)
+      await navigator.clipboard.writeText(url)
+      toast.success('Copied mermaid.live URL!')
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? `Failed to encode: ${err.message}` : 'Failed to encode',
+      )
+    }
+  }, [code])
+
+  const handleCopyPakoInk = useCallback(async () => {
+    if (!code) return
+    try {
+      const fragment = encodeState({ code })
+      const url = buildMermaidInkUrl(fragment)
+      await navigator.clipboard.writeText(url)
+      toast.success('Copied mermaid.ink URL!')
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? `Failed to encode: ${err.message}` : 'Failed to encode',
+      )
+    }
+  }, [code])
+
+  const handleOpenImport = useCallback(() => {
+    setImportInput('')
+    setImportOpen(true)
+  }, [])
+
+  const handleImportSubmit = useCallback(() => {
+    const trimmed = importInput.trim()
+    if (!trimmed) return
+    try {
+      const next = extractCode(trimmed)
+      setCode(next)
+      setImportOpen(false)
+      toast.success('Loaded diagram from pako URL')
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? `Failed to decode: ${err.message}` : 'Failed to decode',
+      )
+    }
+  }, [importInput])
+
   return (
     <div className="mx-auto w-full max-w-6xl space-y-4 px-4 pb-24 md:pb-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{tool.name}</h1>
         <div className="flex gap-2">
+          <Button variant="ghost" size="sm" onClick={handleOpenImport}>
+            <Upload className="size-4 mr-1" />
+            Import Pako URL
+          </Button>
           <Button variant="ghost" size="sm" onClick={handleCopy} disabled={!code}>
             <Copy className="size-4 mr-1" />
             Copy
@@ -299,6 +370,25 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
                   <Copy className="size-4" />
                   Copy image
                 </button>
+                <div className="my-1 h-px bg-border" />
+                <button
+                  type="button"
+                  onClick={handleCopyPakoLive}
+                  disabled={!code}
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <Link2 className="size-4" />
+                  To mermaid.live
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopyPakoInk}
+                  disabled={!code}
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <Link2 className="size-4" />
+                  To mermaid.ink
+                </button>
               </PopoverContent>
             </Popover>
           </div>
@@ -345,6 +435,39 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
         All rendering is performed client-side. Your diagram source never leaves
         your browser.
       </div>
+
+      <Dialog
+        open={importOpen}
+        onOpenChange={(open) => {
+          setImportOpen(open)
+          if (!open) setImportInput('')
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Import from Pako URL</DialogTitle>
+            <DialogDescription>
+              Paste a mermaid.live URL or a raw <code>pako:</code> fragment. The
+              decoded diagram source will replace the current editor content.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            rows={6}
+            placeholder="https://mermaid.live/edit#pako:eNp..."
+            value={importInput}
+            onChange={(e) => setImportInput(e.target.value)}
+            className="font-mono text-xs"
+          />
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setImportOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleImportSubmit} disabled={!importInput.trim()}>
+              Import
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
