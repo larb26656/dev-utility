@@ -10,6 +10,7 @@ import {
   dataFormatTool,
   dockerCliToComposeTool,
   dockerTool,
+  eisenhowerTool,
   fileOpsTool,
   gitTool,
   htmlEntitiesTool,
@@ -76,5 +77,6 @@ registry.register(htmlEntitiesTool)
 registry.register(asciiTableTool)
 registry.register(tailwindTool)
 registry.register(cidrTool)
+registry.register(eisenhowerTool)
 
 export { registry }

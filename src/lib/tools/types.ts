@@ -7,13 +7,20 @@ import type {
 import type { FreeStyleTool } from './freestyle'
 import type { SnippetTool } from './snippet'
 
-export type ToolCategory = 'Hash' | 'Typo' | 'Converter' | 'Snippet' | 'Network'
+export type ToolCategory =
+  | 'Hash'
+  | 'Typo'
+  | 'Converter'
+  | 'Snippet'
+  | 'Network'
+  | 'Productivity'
 
 export const CATEGORY_ORDER = [
   'Hash',
   'Typo',
   'Network',
   'Converter',
+  'Productivity',
   'Snippet',
 ] as const satisfies ReadonlyArray<ToolCategory>
 
