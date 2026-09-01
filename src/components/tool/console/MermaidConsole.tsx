@@ -2,29 +2,28 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Editor from '@monaco-editor/react'
 import mermaid from 'mermaid'
 import {
-  
   TransformComponent,
   TransformWrapper
 } from 'react-zoom-pan-pinch'
 import { toast } from 'sonner'
 import {
   Copy,
-  Maximize2,
-  Minimize2,
+  Download,
+  FileCode,
+  Image as ImageIcon,
   RotateCcw,
   Trash2,
   ZoomIn,
   ZoomOut,
 } from 'lucide-react'
-import type {ReactZoomPanPinchRef} from 'react-zoom-pan-pinch';
+import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch'
 import type { FreeStyleTool } from '@/lib/tools/freestyle'
 import { Button } from '@/components/ui/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from '@/components/ui/dialog'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 
 interface MermaidConsoleProps {
@@ -49,6 +48,43 @@ async function renderMermaid(code: string): Promise<string> {
   const id = `${mermaidId}-${Math.random().toString(36).slice(2, 9)}`
   const { svg } = await mermaid.render(id, code)
   return svg
+}
+
+async function svgToPngBlob(svgStr: string, scale = 2): Promise<Blob> {
+  const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  try {
+    const img = new Image()
+    img.src = url
+    await img.decode()
+    const { naturalWidth: w, naturalHeight: h } = img
+    const canvas = document.createElement('canvas')
+    canvas.width = w * scale
+    canvas.height = h * scale
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Canvas 2D context unavailable')
+    ctx.scale(scale, scale)
+    ctx.drawImage(img, 0, 0)
+    return await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob(
+        (b) => (b ? resolve(b) : reject(new Error('Failed to encode PNG'))),
+        'image/png',
+      ),
+    )
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+}
+
+function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 0)
 }
 
 function ZoomControls({
@@ -100,7 +136,6 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
   const [code, setCode] = useState('')
   const [svg, setSvg] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [isFullscreen, setIsFullscreen] = useState(false)
   const renderTokenRef = useRef(0)
 
   useEffect(() => {
@@ -141,6 +176,45 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
     setSvg('')
     setError(null)
   }, [])
+
+  const handleExportPng = useCallback(async () => {
+    if (!svg) return
+    try {
+      const blob = await svgToPngBlob(svg)
+      triggerDownload(blob, 'mermaid-diagram.png')
+      toast.success('Downloaded PNG')
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? `Failed to export PNG: ${err.message}` : 'Failed to export PNG',
+      )
+    }
+  }, [svg])
+
+  const handleExportSvg = useCallback(() => {
+    if (!svg) return
+    try {
+      const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' })
+      triggerDownload(blob, 'mermaid-diagram.svg')
+      toast.success('Downloaded SVG')
+    } catch {
+      toast.error('Failed to export SVG')
+    }
+  }, [svg])
+
+  const handleCopyImage = useCallback(async () => {
+    if (!svg) return
+    try {
+      const blob = await svgToPngBlob(svg)
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob }),
+      ])
+      toast.success('Copied image to clipboard!')
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? `Failed to copy image: ${err.message}` : 'Failed to copy image',
+      )
+    }
+  }, [svg])
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-4 px-4 pb-24 md:pb-6">
@@ -190,15 +264,43 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
         <div className="relative flex min-h-0 flex-col overflow-hidden rounded-lg border">
           <div className="flex items-center justify-between border-b px-3 py-2">
             <span className="text-sm font-medium">Preview</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsFullscreen(true)}
-              disabled={!svg}
-            >
-              <Maximize2 className="size-4 mr-1" />
-              Fullscreen
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="sm" disabled={!svg}>
+                  <Download className="size-4 mr-1" />
+                  Export
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-48 p-1">
+                <button
+                  type="button"
+                  onClick={handleExportPng}
+                  disabled={!svg}
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <ImageIcon className="size-4" />
+                  Export PNG
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportSvg}
+                  disabled={!svg}
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <FileCode className="size-4" />
+                  Export SVG
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopyImage}
+                  disabled={!svg}
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <Copy className="size-4" />
+                  Copy image
+                </button>
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="relative min-h-0 flex-1 bg-muted/30">
@@ -238,62 +340,6 @@ export function MermaidConsole({ tool }: MermaidConsoleProps) {
           </div>
         </div>
       </div>
-
-      <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent
-          className="inset-0 h-screen w-screen max-w-none translate-x-0 translate-y-0 gap-0 overflow-hidden rounded-none border-none p-0"
-          showCloseButton={false}
-        >
-          <DialogTitle className="sr-only">Mermaid Diagram</DialogTitle>
-          <DialogDescription className="sr-only">
-            Fullscreen Mermaid diagram preview with pan and zoom.
-          </DialogDescription>
-
-          <div className="flex h-screen w-screen flex-col bg-background">
-            <div className="flex items-center justify-between border-b px-4 py-2">
-              <span className="text-sm font-medium">{tool.name}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsFullscreen(false)}
-              >
-                <Minimize2 className="size-4 mr-1" />
-                Exit Fullscreen
-              </Button>
-            </div>
-
-            <div className="relative min-h-0 flex-1 bg-muted/20">
-              {svg ? (
-                <TransformWrapper
-                  centerOnInit
-                  initialScale={0.7}
-                  minScale={0.05}
-                  maxScale={12}
-                >
-                  {(controls: ReactZoomPanPinchRef) => (
-                    <>
-                      <ZoomControls controls={controls} align="start" />
-                      <TransformComponent
-                        wrapperClass="!h-full !w-full !cursor-grab active:!cursor-grabbing"
-                        contentClass="!flex !items-center !justify-center"
-                      >
-                        <div
-                          className="mermaid-svg [&>svg]:max-w-none [&>svg]:h-auto [&>svg]:w-auto"
-                          dangerouslySetInnerHTML={{ __html: svg }}
-                        />
-                      </TransformComponent>
-                    </>
-                  )}
-                </TransformWrapper>
-              ) : (
-                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                  Nothing to display.
-                </div>
-              )}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       <div className="text-center text-[10px] leading-tight text-muted-foreground md:text-xs">
         All rendering is performed client-side. Your diagram source never leaves
