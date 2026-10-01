@@ -188,7 +188,6 @@ export function NWayTransformerConsole({
         <Button
           onClick={handleSwap}
           variant="outline"
-          disabled={!output || !!error}
           className="flex-1 min-w-[80px] md:min-w-[150px] h-10 md:h-auto"
         >
           <RefreshCw className="w-4 h-4" />
