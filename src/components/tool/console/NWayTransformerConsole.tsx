@@ -68,9 +68,10 @@ export function NWayTransformerConsole({
   }
 
   const handleSwap = () => {
-    instance.swap()
     setInput(output)
     setOutput(input)
+    setInputFormat(outputFormat)
+    setOutputFormat(inputFormat)
   }
 
   const handleClear = () => {

@@ -19,6 +19,7 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
   const [output, setOutput] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [, setSwapVersion] = useState(0)
   const isCanConvert = !!input
 
   const handleConvert = async () => {
@@ -50,6 +51,7 @@ export function TransformerConsole({ instance }: TransformerConsoleProps) {
     instance.swap()
     setInput(output)
     setOutput(input)
+    setSwapVersion((version) => version + 1)
   }
 
   const handleClear = () => {
