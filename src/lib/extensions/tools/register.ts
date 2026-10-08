@@ -34,6 +34,7 @@ import {
   systemTool,
   tailwindTool,
   textProcessTool,
+  textSizeTool,
   timestampTool,
   upperCaseTool,
   urlEscapeTool,
@@ -80,5 +81,6 @@ registry.register(tailwindTool)
 registry.register(cidrTool)
 registry.register(eisenhowerTool)
   registry.register(satirTool)
+registry.register(textSizeTool)
 
 export { registry }
